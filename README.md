@@ -3,6 +3,9 @@
 ![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
 ![Flask](https://img.shields.io/badge/Flask-Web%20Framework-green)
 ![MySQL](https://img.shields.io/badge/MySQL-Database-orange)
+![HTML5](https://img.shields.io/badge/HTML5-Frontend-orange)
+![CSS3](https://img.shields.io/badge/CSS3-Style-blue)
+![JavaScript](https://img.shields.io/badge/JavaScript-Frontend-yellow)
 ![License](https://img.shields.io/badge/License-MIT-purple)
 
 ## Descripción General
