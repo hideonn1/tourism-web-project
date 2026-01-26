@@ -103,6 +103,18 @@ pip install -r requirements.txt
 python app.py
 ```
 Accede a la aplicación en: `http://localhost:5000`
+Una vez dentro, accede a las funciones de la aplicación iniciando sesión con una de las credenciales de la base de datos, tales como:
+
+Cliente:
+  email: cliente@cliente.cl
+  password: Cliente123?
+
+Administrador:
+  email: admin@admin.cl
+  password: Administrador123?
+
+O también puedes ir al registro, completar los campos solicitados y luego iniciar sesión con esa cuenta. (Accederás con el rol de Cliente por defecto)
+
 
 ---
 
