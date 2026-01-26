@@ -10,7 +10,7 @@
 
 ## Descripción General
 
-**Turismo Web App** es una plataforma integral para la gestión de una agencia de viajes moderna. Este sistema permite la administración eficiente de destinos turísticos, paquetes de viaje y reservas de clientes, ofreciendo una experiencia de usuario fluida y segura.
+**Explora360** (nombre ficticio) es una plataforma integral para la gestión de una agencia de viajes moderna. Este sistema permite la administración eficiente de destinos turísticos, paquetes de viaje y reservas de clientes, ofreciendo una experiencia de usuario fluida y segura.
 
 ---
 
