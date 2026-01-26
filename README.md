@@ -11,7 +11,8 @@
 ## Descripción General
 
 **Explora360** (nombre ficticio) es una plataforma integral para la gestión de una agencia de viajes moderna. Este sistema permite la administración eficiente de destinos turísticos, paquetes de viaje y reservas de clientes, ofreciendo una experiencia de usuario fluida y segura.
-Status: EN DESARROLLO
+---
+**Status: EN DESARROLLO**
 
 ---
 
@@ -70,8 +71,8 @@ Sigue estos pasos para ejecutar el proyecto en tu máquina local:
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/proyecto-web-turismo.git
-cd proyecto-web-turismo/main
+git clone https://github.com/hideonn1/tourism-web-project.git
+cd tourism-web-project/main
 ```
 
 ### 2. Configurar la Base de Datos
