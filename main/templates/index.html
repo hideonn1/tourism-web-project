@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explora360</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Notification Toast -->
+        <div id="notification-toast" class="notification-toast"></div>
+
+        <!-- Custom Modal -->
+        <div id="custom-modal" class="modal-overlay">
+            <div class="modal-container">
+                <h3 id="modal-title"></h3>
+                <p id="modal-msg"></p>
+                <input type="number" id="modal-input" class="modal-input" min="1" style="display: none;">
+                <div class="modal-actions">
+                    <button id="modal-btn-cancel" class="btn-secondary">Cancelar</button>
+                    <button id="modal-btn-confirm" class="btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="logo">Explora360</div>
+            <div class="nav-links">
+                <a href="#" id="nav-home" onclick="showHome()">Inicio</a>
+                <a href="#" id="nav-login" onclick="showSection('login')">Login</a>
+                <a href="#" id="nav-dashboard" style="display: none;" onclick="showProfile()">Mi Cuenta</a>
+                <a href="#" id="nav-logout" style="display: none;" onclick="logout()">Logout</a>
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                    <!-- Sun Icon (for Dark Mode to switch to Light) -->
+                    <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Sections -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <h1>Descubre tu próximo destino</h1>
+                <p>Experiencias inolvidables a precios increíbles.</p>
+                <button onclick="showSection('login')" class="btn-primary">Comenzar</button>
+            </div>
+        </section>
+
+        <section id="login" class="section">
+            <!-- Decorative Bubbles -->
+            <div class="bubble bubble-1"></div>
+            <div class="bubble bubble-2"></div>
+            <div class="bubble bubble-3"></div>
+
+            <div class="auth-container">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form" autocomplete="off">
+                    <input type="email" id="email" placeholder="Correo Electrónico" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Contraseña" required>
+                        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility(this)">
+                            <!-- Eye Icon SVG (Outlined) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn-primary">Ingresar</button>
+                </form>
+                <p id="login-error" class="error-msg"></p>
+                <div style="margin-top: 1.5rem; text-align: center;">
+                    <button class="btn-text" onclick="showSection('register')">Si no tienes una cuenta, regístrate
+                        aquí</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="register" class="section">
+            <div class="bubble bubble-1"></div>
+            <div class="bubble bubble-2"></div>
+            <div class="bubble bubble-3"></div>
+
+            <div class="auth-container">
+                <h2>Registro</h2>
+                <form onsubmit="register(event)" class="create-form" style="align-items: stretch;">
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="text" id="reg-nombres" placeholder="Nombres" required style="flex: 1;"
+                            pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras y espacios">
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="text" id="reg-paterno" placeholder="Apellido Paterno" required style="flex: 1;"
+                            pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras y espacios">
+                        <input type="text" id="reg-materno" placeholder="Apellido Materno (Opcional)" style="flex: 1;"
+                            pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*" title="Solo letras y espacios">
+                    </div>
+                    <input type="text" id="reg-rut" placeholder="RUT" required>
+                    <input type="email" id="reg-email" placeholder="Correo Electrónico" required>
+                    <input type="tel" id="reg-phone" placeholder="Teléfono (+56 9 ...)" required
+                        pattern="\+56 9 [0-9]{4} [0-9]{4}" title="+56 9 1234 5678">
+
+                    <div class="password-wrapper">
+                        <input type="password" id="reg-password" placeholder="Contraseña" required>
+                        <button type="button" class="toggle-password-btn"
+                            onclick="togglePasswordVisibility(this, 'reg-password')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <p
+                        style="font-size: 0.8rem; color: var(--secondary-text); margin-top: 0.25rem; text-align: left; opacity: 0.8;">
+                        * Mín 8 caracteres, 1 número, 1 especial (#$%&/!"?)
+                    </p>
+
+                    <button type="submit" class="btn-primary" style="margin-top: 1rem;">Registrarse</button>
+                    <button type="button" class="btn-secondary" onclick="showSection('login')"
+                        style="margin-top: 0.5rem; width: 100%;">Volver al Login</button>
+                </form>
+                <p id="register-error" class="error-msg"></p>
+            </div>
+        </section>
+
+        <section id="admin-dashboard" class="section">
+            <h2 id="admin-title-container">
+                <span id="welcome-text">Bienvenido al </span>
+                <span id="panel-text">Panel de Administración</span>
+            </h2>
+            <div class="dashboard-controls">
+                <button onclick="loadDestinos()" class="btn-secondary">Gestionar Destinos</button>
+                <button onclick="loadPaquetes()" class="btn-secondary">Gestionar Paquetes</button>
+            </div>
+            <div id="admin-content">
+                <!-- Dynamic Content Here -->
+            </div>
+        </section>
+
+        <section id="client-dashboard" class="section">
+            <div id="client-welcome-header">
+                <h2 id="client-main-title">Bienvenido a Explora360</h2>
+                <p class="client-subtitle">Escoge una opción para aventurarte por el mundo</p>
+            </div>
+
+            <div class="client-controls">
+                <button onclick="loadAvailablePackages()" class="btn-secondary">Ver Paquetes Disponibles</button>
+                <button onclick="loadMyReservations()" class="btn-secondary">Mis Reservas</button>
+            </div>
+            <div id="client-content">
+                <!-- Dynamic Content Here -->
+            </div>
+        </section>
+
+        <!-- Admin dashboard also needs link or separate profile section if shared? 
+             User asked for "Client and Admin". Let's use a shared section or render differently.
+             Ideally, showProfile() switches to a specific section. -->
+
+        <section id="profile-section" class="section">
+            <!-- Decorative Bubbles -->
+            <div class="bubble bubble-1"></div>
+            <div class="bubble bubble-2"></div>
+            <div class="bubble bubble-3"></div>
+
+            <div class="auth-container">
+                <h2>Mi Cuenta</h2>
+                <form onsubmit="updateProfile(event)" id="profile-form">
+                    <label for="prof-email"
+                        style="display:block; text-align:left; margin-bottom:0.5rem; font-weight:600;">Email</label>
+                    <input type="email" id="prof-email" required>
+
+                    <label for="prof-phone"
+                        style="display:block; text-align:left; margin-bottom:0.5rem; font-weight:600;">Teléfono</label>
+                    <input type="tel" id="prof-phone" required pattern="\+56 9 [0-9]{4} [0-9]{4}"
+                        placeholder="+56 9 1234 5678" title="Formato: +56 9 1234 5678">
+
+                    <div style="margin-top: 1rem; text-align:center;">
+                        <button type="submit" class="btn-primary">Guardar Cambios</button>
+                        <button type="button" onclick="showDashboard()" class="btn-secondary">Volver</button>
+                    </div>
+                </form>
+                <p id="profile-msg" style="margin-top:1rem; text-align:center;"></p>
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>
