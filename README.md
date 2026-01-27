@@ -10,7 +10,9 @@
 
 ## Descripción General
 
-**Turismo Web App** es una plataforma integral para la gestión de una agencia de viajes moderna. Este sistema permite la administración eficiente de destinos turísticos, paquetes de viaje y reservas de clientes, ofreciendo una experiencia de usuario fluida y segura.
+**Explora360** (nombre ficticio) es una plataforma integral para la gestión de una agencia de viajes moderna. Este sistema permite la administración eficiente de destinos turísticos, paquetes de viaje y reservas de clientes, ofreciendo una experiencia de usuario fluida y segura.
+---
+**Status: EN DESARROLLO**
 
 ---
 
@@ -69,8 +71,8 @@ Sigue estos pasos para ejecutar el proyecto en tu máquina local:
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/proyecto-web-turismo.git
-cd proyecto-web-turismo/main
+git clone https://github.com/hideonn1/tourism-web-project.git
+cd tourism-web-project/main
 ```
 
 ### 2. Configurar la Base de Datos
@@ -101,6 +103,18 @@ pip install -r requirements.txt
 python app.py
 ```
 Accede a la aplicación en: `http://localhost:5000`
+Una vez dentro, accede a las funciones de la aplicación iniciando sesión con una de las credenciales de la base de datos, tales como:
+
+Cliente:
+  email: cliente@cliente.cl
+  password: Cliente123?
+
+Administrador:
+  email: admin@admin.cl
+  password: Administrador123?
+
+O también puedes ir al registro, completar los campos solicitados y luego iniciar sesión con esa cuenta. (Accederás con el rol de Cliente por defecto)
+
 
 ---
 
