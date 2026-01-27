@@ -7,6 +7,11 @@ const state = {
     user: null
 };
 
+// Helper to update page title
+function updateTitle(sectionName) {
+    document.title = `${sectionName} - Explora360`;
+}
+
 function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
@@ -24,12 +29,30 @@ function toggleTheme() {
 
 function updateThemeIcon(isLight) {
     const icon = document.getElementById('theme-icon');
+    const logo = document.getElementById('nav-logo');
+
+    // Update Theme Toggle Icon immediately
     if (isLight) {
-        // Moon Icon
         icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
     } else {
-        // Sun Icon
         icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+    }
+
+    // Update Logo with Fade Animation
+    if (logo) {
+        // Start Fade Out
+        logo.classList.add('fade-out');
+
+        // Wait for fade out to finish (300ms matches css), then swap source and fade in
+        setTimeout(() => {
+            if (isLight) {
+                logo.src = '/static/img/favicon-light.svg';
+            } else {
+                logo.src = '/static/img/favicon-dark.svg';
+            }
+            // Start Fade In
+            logo.classList.remove('fade-out');
+        }, 300);
     }
 }
 
@@ -38,6 +61,16 @@ function showSection(sectionId) {
         sec.classList.remove('active');
     });
     document.getElementById(sectionId).classList.add('active');
+
+    // Update Title dynamically
+    switch (sectionId) {
+        case 'home': document.title = 'Explora360 Chile | Viajes y Turismo'; break;
+        case 'login': updateTitle('Iniciar Sesión'); break;
+        case 'register': updateTitle('Registro'); break;
+        case 'admin-dashboard': updateTitle('Panel de Administración'); break;
+        case 'client-dashboard': updateTitle('Panel de Cliente'); break;
+        case 'profile-section': updateTitle('Mi Perfil'); break;
+    }
 }
 
 function updateNav() {
@@ -107,7 +140,6 @@ function togglePasswordVisibility(btn, targetId = 'password') {
     // Update Icon
     if (isPassword) {
         // Switch to Text (Visible) -> Show Eye Off (Slash)
-        // Means "Click to hide" or "Content is visible"
         btn.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
@@ -222,6 +254,7 @@ function applyTransition(elementId) {
 
 async function loadDestinos() {
     hideWelcomeText();
+    updateTitle('Gestión de Destinos');
     const content = document.getElementById('admin-content');
     applyTransition('admin-content');
 
@@ -260,6 +293,7 @@ async function loadDestinos() {
 
 async function loadPaquetes() {
     hideWelcomeText();
+    updateTitle('Gestión de Paquetes');
     const content = document.getElementById('admin-content');
     applyTransition('admin-content');
 
@@ -328,6 +362,7 @@ function resetClientHeader() {
 
 async function loadAvailablePackages() {
     hideClientHeader();
+    updateTitle('Paquetes Disponibles');
     const content = document.getElementById('client-content');
     applyTransition('client-content');
 
@@ -501,6 +536,7 @@ async function reservarPaquete(idPaquete, cuposDisponibles) {
 
 async function loadMyReservations() {
     hideClientHeader();
+    updateTitle('Mis Reservas');
     const content = document.getElementById('client-content');
     applyTransition('client-content');
     content.classList.add('content-area'); // Ensure grid
@@ -657,6 +693,7 @@ function showHome() {
 
 async function showProfile() {
     showSection('profile-section');
+    updateTitle('Mi Perfil');
     const msg = document.getElementById('profile-msg');
     msg.innerText = 'Cargando datos...';
     msg.style.color = '#fff';

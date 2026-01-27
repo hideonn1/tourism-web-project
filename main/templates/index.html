@@ -4,10 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explora360</title>
+    <title>Explora360 Chile | Viajes y Turismo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/hero_anim.css') }}">
+
+    <!-- Favicons -->
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon-light.ico') }}"
+        media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" sizes="96x96"
+        href="{{ url_for('static', filename='img/favicon-light-96x96.png') }}" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon-light.svg') }}"
+        media="(prefers-color-scheme: light)">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon-light.png') }}"
+        media="(prefers-color-scheme: light)">
+    <link rel="manifest" href="{{ url_for('static', filename='img/site-light.webmanifest') }}"
+        media="(prefers-color-scheme: light)">
+
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon-dark.ico') }}"
+        media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="96x96"
+        href="{{ url_for('static', filename='img/favicon-dark-96x96.png') }}" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon-dark.svg') }}"
+        media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon-dark.png') }}"
+        media="(prefers-color-scheme: dark)">
+    <link rel="manifest" href="{{ url_for('static', filename='img/site-dark.webmanifest') }}"
+        media="(prefers-color-scheme: dark)">
+
 </head>
 
 <body>
@@ -30,7 +54,10 @@
 
         <!-- Navigation -->
         <nav class="navbar">
-            <div class="logo">Explora360</div>
+            <div class="logo">
+                Explora360
+                <img id="nav-logo" src="{{ url_for('static', filename='img/favicon-dark.svg') }}" alt="Logo">
+            </div>
             <div class="nav-links">
                 <a href="#" id="nav-home" onclick="showHome()">Inicio</a>
                 <a href="#" id="nav-login" onclick="showSection('login')">Login</a>
