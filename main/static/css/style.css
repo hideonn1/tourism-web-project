@@ -576,3 +576,111 @@ input:focus {
     flex: 1;
     margin: 0;
 }
+
+/* =========================================
+   Footer Minimalista Glassmorphism
+   ========================================= */
+
+.footer-container {
+    width: 100%;
+    /* Glassmorphism Background */
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    
+    /* Border & Shadow for depth */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.2);
+    
+    padding: 1.5rem 0;
+    margin-top: auto; /* Push to bottom if parent handles it */
+    position: relative;
+    z-index: 50;
+}
+
+body.light-mode .footer-container {
+    background: rgba(255, 255, 255, 0.8);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.05);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Typography */
+.copyright {
+    margin: 0;
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.copyright strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.copyright-separator {
+    color: var(--accent);
+    opacity: 0.6;
+}
+
+/* Links */
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap; /* Safe wrapping on small screens */
+    justify-content: center;
+}
+
+.footer-links li a {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 300;
+    font-size: 0.95rem;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.2rem 0;
+}
+
+.footer-links li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--accent);
+    transition: width 0.3s ease;
+}
+
+.footer-links li a:hover {
+    opacity: 1;
+    color: var(--accent);
+}
+
+.footer-links li a:hover::after {
+    width: 100%;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+    .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}

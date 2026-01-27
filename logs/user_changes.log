@@ -1,0 +1,28 @@
+2026-01-26 23:49:11 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-01-26 23:49:11 - INFO - [33mPress CTRL+C to quit[0m
+2026-01-26 23:49:11 - INFO -  * Restarting with stat
+2026-01-26 23:49:11 - WARNING -  * Debugger is active!
+2026-01-26 23:49:11 - INFO -  * Debugger PIN: 816-433-963
+2026-01-26 23:49:24 - INFO - 127.0.0.1 - - [26/Jan/2026 23:49:24] "GET / HTTP/1.1" 200 -
+2026-01-26 23:49:24 - INFO - 127.0.0.1 - - [26/Jan/2026 23:49:24] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-01-26 23:49:24 - INFO - 127.0.0.1 - - [26/Jan/2026 23:49:24] "GET /static/js/main.js HTTP/1.1" 200 -
+2026-01-26 23:49:26 - INFO - 127.0.0.1 - - [26/Jan/2026 23:49:26] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-01-26 23:54:44 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-01-26 23:54:44 - INFO - [33mPress CTRL+C to quit[0m
+2026-01-26 23:54:44 - INFO -  * Restarting with stat
+2026-01-26 23:54:45 - WARNING -  * Debugger is active!
+2026-01-26 23:54:45 - INFO -  * Debugger PIN: 816-433-963
+2026-01-26 23:54:49 - INFO - 127.0.0.1 - - [26/Jan/2026 23:54:49] "GET / HTTP/1.1" 200 -
+2026-01-26 23:54:49 - INFO - 127.0.0.1 - - [26/Jan/2026 23:54:49] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-01-26 23:54:49 - INFO - 127.0.0.1 - - [26/Jan/2026 23:54:49] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-01-26 23:55:42 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-01-26 23:55:42 - INFO - [33mPress CTRL+C to quit[0m
+2026-01-26 23:55:42 - INFO -  * Restarting with stat
+2026-01-26 23:55:43 - WARNING -  * Debugger is active!
+2026-01-26 23:55:43 - INFO -  * Debugger PIN: 816-433-963
+2026-01-26 23:55:46 - INFO - 127.0.0.1 - - [26/Jan/2026 23:55:46] "GET / HTTP/1.1" 200 -
+2026-01-26 23:55:46 - INFO - 127.0.0.1 - - [26/Jan/2026 23:55:46] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-01-26 23:55:46 - INFO - 127.0.0.1 - - [26/Jan/2026 23:55:46] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
