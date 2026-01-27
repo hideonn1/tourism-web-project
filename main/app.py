@@ -30,6 +30,18 @@ reserva_serv = Reservas_Service(reserva_repo)
 def index():
     return render_template('index.html')
 
+@app.route('/sobre-nosotros')
+def about():
+    return render_template('about.html')
+
+@app.route('/contacto')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/politica-privacidad')
+def privacy():
+    return render_template('privacy.html')
+
 # --- API ENDPOINTS ---
 
 @app.route('/api/login', methods=['POST'])
