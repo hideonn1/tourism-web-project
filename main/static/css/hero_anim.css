@@ -1,0 +1,33 @@
+.hero-subtitle {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 3rem auto;
+    /* Center and keep bottom margin */
+    position: relative;
+    clip-path: inset(0 100% 0 0);
+    /* Start fully hidden from right */
+    animation: revealLeftRight 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    animation-delay: 0.2s;
+    /* Brief pause before starting */
+    opacity: 0;
+    /* Start hidden */
+}
+
+@keyframes revealLeftRight {
+    0% {
+        clip-path: inset(0 100% 0 0);
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    10% {
+        opacity: 1;
+        /* Make visible quickly so clip-path does the work */
+    }
+
+    100% {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

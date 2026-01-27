@@ -7,6 +7,7 @@
     <title>Explora360</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hero_anim.css') }}">
 </head>
 
 <body>
@@ -58,7 +59,7 @@
         <section id="home" class="section active">
             <div class="hero">
                 <h1>Descubre tu próximo destino</h1>
-                <p>Experiencias inolvidables a precios increíbles.</p>
+                <p class="hero-subtitle">Experiencias inolvidables a precios increíbles.</p>
                 <button onclick="showSection('login')" class="btn-primary">Comenzar</button>
             </div>
         </section>
