@@ -60,6 +60,9 @@ def login():
                 'usuario': {
                     'id': usuario.id_usuario,
                     'nombre': usuario.nombres,
+                    'apellido_paterno': usuario.apellido_paterno,
+                    'email': usuario.email,
+                    'telefono': usuario.telefono,
                     'rol': usuario.rol
                 }
             })

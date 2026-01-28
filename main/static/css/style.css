@@ -703,3 +703,20 @@ body.light-mode .footer-container {
         justify-content: space-between;
     }
 }
+
+/* Destination Card Enhancements */
+.card-desc {
+    font-size: 0.95rem;
+    color: var(--secondary-text);
+    margin: 0.5rem 0;
+    line-height: 1.5;
+}
+
+.card-activities {
+    font-size: 0.9rem;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 1rem;
+    border-top: 1px solid var(--secondary);
+    padding-top: 0.5rem;
+}

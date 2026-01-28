@@ -294,6 +294,8 @@ async function loadDestinos() {
             card.innerHTML = `
                 <h4>${d.nombre}</h4>
                 <p><strong>Ubicación:</strong> ${d.ciudad}, ${d.pais}</p>
+                <p class="card-desc">${d.descripcion}</p>
+                <p class="card-activities"><strong>Actividades:</strong> ${d.actividades_disponibles}</p>
                 <div class="card-actions">
                     <button onclick="deleteDestino(${d.id_destino})" class="btn-danger btn-sm">Eliminar</button>
                 </div>
