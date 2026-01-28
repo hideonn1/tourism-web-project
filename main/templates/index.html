@@ -60,9 +60,9 @@
             </div>
             <div class="nav-links">
                 <a href="#" id="nav-home" onclick="showHome()">Inicio</a>
-                <a href="#" id="nav-login" onclick="showSection('login')">Login</a>
+                <a href="#" id="nav-login" onclick="showSection('login')">Iniciar sesión</a>
                 <a href="#" id="nav-dashboard" style="display: none;" onclick="showProfile()">Mi Cuenta</a>
-                <a href="#" id="nav-logout" style="display: none;" onclick="logout()">Logout</a>
+                <a href="#" id="nav-logout" style="display: none;" onclick="logout()">Cerrar sesión</a>
                 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
                     <!-- Sun Icon (for Dark Mode to switch to Light) -->
                     <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
@@ -117,7 +117,7 @@
                 </form>
                 <p id="login-error" class="error-msg"></p>
                 <div style="margin-top: 1.5rem; text-align: center;">
-                    <button class="btn-text" onclick="showSection('register')">Si no tienes una cuenta, regístrate
+                    <button class="btn-text" onclick="showSection('register')" >Si no tienes una cuenta, regístrate
                         aquí</button>
                 </div>
             </div>
@@ -165,7 +165,7 @@
 
                     <button type="submit" class="btn-primary" style="margin-top: 1rem;">Registrarse</button>
                     <button type="button" class="btn-secondary" onclick="showSection('login')"
-                        style="margin-top: 0.5rem; width: 100%;">Volver al Login</button>
+                        style="margin-top: 0.5rem; width: 100%;">Volver al inicio de sesión</button>
                 </form>
                 <p id="register-error" class="error-msg"></p>
             </div>

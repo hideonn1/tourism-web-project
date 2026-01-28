@@ -62,6 +62,20 @@ function showSection(sectionId) {
     });
     document.getElementById(sectionId).classList.add('active');
 
+    // Reset Nav to default state based on user status
+    updateNav();
+
+    // Specific overrides for current section
+    if (sectionId === 'login') {
+        const navLogin = document.getElementById('nav-login');
+        if (navLogin) navLogin.style.display = 'none';
+    }
+
+    if (sectionId === 'home') {
+        const navHome = document.getElementById('nav-home');
+        if (navHome) navHome.style.display = 'none';
+    }
+
     // Update Title dynamically
     switch (sectionId) {
         case 'home': document.title = 'Explora360 Chile | Viajes y Turismo'; break;
