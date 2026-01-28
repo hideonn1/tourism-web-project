@@ -291,13 +291,21 @@ async function loadDestinos() {
         destinos.forEach(d => {
             const card = document.createElement('div');
             card.className = 'card';
+
+            // Clean names for URL
+            const queryName = encodeURIComponent(d.nombre + ' ' + d.pais + ' landscape');
+            const imageUrl = `https://image.pollinations.ai/prompt/${queryName}?width=400&height=250&nologo=true`;
+
             card.innerHTML = `
-                <h4>${d.nombre}</h4>
-                <p><strong>Ubicación:</strong> ${d.ciudad}, ${d.pais}</p>
-                <p class="card-desc">${d.descripcion}</p>
-                <p class="card-activities"><strong>Actividades:</strong> ${d.actividades_disponibles}</p>
-                <div class="card-actions">
-                    <button onclick="deleteDestino(${d.id_destino})" class="btn-danger btn-sm">Eliminar</button>
+                <img src="${imageUrl}" class="card-img-top" alt="${d.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image'">
+                <div class="card-content">
+                    <h4>${d.nombre}</h4>
+                    <p><strong>Ubicación:</strong> ${d.ciudad}, ${d.pais}</p>
+                    <p class="card-desc">${d.descripcion}</p>
+                    <p class="card-activities"><strong>Actividades:</strong> ${d.actividades_disponibles}</p>
+                    <div class="card-actions">
+                        <button onclick="deleteDestino(${d.id_destino})" class="btn-danger btn-sm">Eliminar</button>
+                    </div>
                 </div>
             `;
             list.appendChild(card);
@@ -403,22 +411,33 @@ async function loadAvailablePackages() {
             }
             destinosHtml += '</ul>';
 
+            // Initial image from first destination or generic travel
+            let imageUrl = 'https://image.pollinations.ai/prompt/travel%20vacation%20landscape?width=400&height=250&nologo=true';
+            if (p.destinos && p.destinos.length > 0) {
+                const firstD = p.destinos[0];
+                const queryName = encodeURIComponent(firstD.nombre + ' ' + firstD.ciudad + ' travel');
+                imageUrl = `https://image.pollinations.ai/prompt/${queryName}?width=400&height=250&nologo=true`;
+            }
+
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
-                <h4>Paquete #${p.id_paquete}</h4>
-                <p><strong>Salida:</strong> ${p.fecha_salida}</p>
-                <p><strong>Llegada:</strong> ${p.fecha_llegada}</p>
-                <p><strong>Costo:</strong> $${p.costo_destino}</p>
-                <p><strong>Cupos:</strong> ${p.cupos}</p>
-                <div class="destinos-list">
-                    <strong>Destinos:</strong>
-                    ${destinosHtml}
-                </div>
-                 <div class="card-actions">
-                    <button onclick="reservarPaquete(${p.id_paquete}, ${p.cupos})" class="btn-primary" ${p.cupos <= 0 ? 'disabled' : ''}>
-                        ${p.cupos > 0 ? 'Reservar' : 'Agotado'}
-                    </button>
+                <img src="${imageUrl}" class="card-img-top" alt="Paquete Turístico" loading="lazy">
+                <div class="card-content">
+                    <h4>Paquete #${p.id_paquete}</h4>
+                    <p><strong>Salida:</strong> ${p.fecha_salida}</p>
+                    <p><strong>Llegada:</strong> ${p.fecha_llegada}</p>
+                    <p><strong>Costo:</strong> $${p.costo_destino}</p>
+                    <p><strong>Cupos:</strong> ${p.cupos}</p>
+                    <div class="destinos-list">
+                        <strong>Destinos:</strong>
+                        ${destinosHtml}
+                    </div>
+                     <div class="card-actions">
+                        <button onclick="reservarPaquete(${p.id_paquete}, ${p.cupos})" class="btn-primary" ${p.cupos <= 0 ? 'disabled' : ''}>
+                            ${p.cupos > 0 ? 'Reservar' : 'Agotado'}
+                        </button>
+                    </div>
                 </div>
             `;
             content.appendChild(card);
