@@ -240,8 +240,16 @@ def paquetes():
                  cupos=int(data.get('cupos')),
                  modalidad="Nacional" # Default, logic updates it
              )
-             paquete_serv.agregar_paquete(nuevo_paquete)
-             return jsonify({'success': True, 'message': 'Paquete creado'})
+             paquete_creado = paquete_serv.agregar_paquete(nuevo_paquete)
+             
+             # Link Destinos
+             destinos_ids = data.get('destinos', [])
+             for d_id in destinos_ids:
+                 destino_obj = destino_serv.obtener_destino_por_id(d_id)
+                 if destino_obj:
+                     paquete_serv.agregar_destino_a_paquete(paquete_creado, destino_obj)
+
+             return jsonify({'success': True, 'message': 'Paquete creado con destinos'})
          except ValueError as ve:
              return jsonify({'success': False, 'message': f'Error de formato de fecha o valor: {str(ve)}'}), 400
          except Exception as e:

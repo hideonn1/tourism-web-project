@@ -52,7 +52,7 @@ body {
 
 .nav-links {
     margin-right: 5rem;
-    /* Increased to 5rem to ensure Logout is fully visible */
+    /* Increased to 5rem to ensure a is fully visible */
 }
 
 .logo {
@@ -744,19 +744,202 @@ body.light-mode .footer-container {
     }
 }
 
-/* Destination Card Enhancements */
-.card-desc {
-    font-size: 0.95rem;
-    color: var(--secondary-text);
-    margin: 0.5rem 0;
-    line-height: 1.5;
+/* Destination Selector in Modal: List Layout */
+.destinations-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    /* Extra right padding for scrollbar safety */
+    width: 100%;
 }
 
-.card-activities {
-    font-size: 0.9rem;
-    color: var(--text);
+.destinations-list-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.destinations-list-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.destinations-list-container::-webkit-scrollbar-thumb {
+    background-color: var(--secondary);
+    border-radius: 4px;
+}
+
+.destination-option-row {
+    display: block;
+    width: auto;
+    /* Let it fill naturally, respecting scrollbar */
+    margin: 0;
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Hide default checkbox but keep it accessible/functional for state */
+.destination-option-row input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Hide default checkbox but keep it accessible/functional for state */
+.destination-option-row input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.destination-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    justify-content: center;
+    overflow: hidden;
+    /* Contain text */
+    flex: 1;
+    /* Allow to take available space */
+    padding-right: 1rem;
+    /* Space before checkbox */
+}
+
+.destination-row-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--background);
+    /* Minimalist: Shadow instead of hard border */
+    border: 1px solid transparent;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    min-height: 80px;
+    /* Uniform height for all cards */
+    width: auto;
+    /* Fill container (label) naturally */
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.destination-title {
     font-weight: 500;
+    font-size: 1rem;
+    color: var(--text);
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Truncate long titles */
+}
+
+.destination-sub {
+    font-size: 0.8rem;
+    color: var(--secondary-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Truncate long subtitles */
+}
+
+/* The "Cajita" (Custom Checkbox) */
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--secondary);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+
+.custom-checkbox::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 2px;
+    transform: scale(0);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Selected State Interactions */
+
+/* Change Title Color */
+.destination-option-row input:checked+.destination-row-content .destination-title {
+    color: var(--accent);
+}
+
+/* Selected Card Style */
+.destination-option-row input:checked+.destination-row-content {
+    background-color: rgba(59, 130, 246, 0.04);
+    border-color: var(--accent);
+    /* Reveal border on selection */
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+/* Activate Checkbox */
+.destination-option-row input:checked+.destination-row-content .custom-checkbox {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.destination-option-row input:checked+.destination-row-content .custom-checkbox::after {
+    transform: scale(1);
+}
+
+/* Hover Effects */
+.destination-option-row:hover .destination-row-content {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    /* Elevated shadow on hover */
+}
+
+/* Destination Search & Filters */
+.destination-controls {
+    display: flex;
+    gap: 0.5rem;
     margin-bottom: 1rem;
-    border-top: 1px solid var(--secondary);
-    padding-top: 0.5rem;
+    /* More space between controls and list */
+    width: 100%;
+}
+
+.destination-search {
+    flex: 2;
+    padding: 0.5rem;
+    border: 1px solid var(--secondary);
+    border-radius: 0.5rem;
+    background: var(--background);
+    color: var(--text);
+    font-size: 0.9rem;
+    margin: 0 !important;
+    /* Override generic input margin */
+}
+
+.destination-filter {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--secondary);
+    border-radius: 0.5rem;
+    background: var(--background);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.destination-filter:focus,
+.destination-search:focus {
+    outline: none;
+    border-color: var(--accent);
 }

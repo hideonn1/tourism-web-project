@@ -654,34 +654,167 @@ async function deleteDestino(id) {
     else alert('Error eliminando destino');
 }
 
-function showCreatePaqueteForm() {
+async function showCreatePaqueteForm() {
     const content = document.getElementById('admin-content');
+
+    let allDestinos = [];
+    let selectedIds = new Set();
+
+    // Continent Mapping Helper
+    const getContinent = (pais) => {
+        const p = pais.toLowerCase();
+        if (['chile', 'argentina', 'perú', 'peru', 'brasil', 'colombia', 'uruguay', 'ecuador'].some(x => p.includes(x))) return 'Sudamérica';
+        if (['estados unidos', 'méxico', 'mexico', 'canadá', 'canada'].some(x => p.includes(x))) return 'Norteamérica';
+        if (['españa', 'francia', 'italia', 'alemania', 'inglaterra'].some(x => p.includes(x))) return 'Europa';
+        if (['china', 'japón', 'japon', 'corea'].some(x => p.includes(x))) return 'Asia';
+        return 'Otros';
+    };
+
+    // Render Function
+    const renderList = (list) => {
+        const container = document.getElementById('destinos-list-container');
+        if (!container) return; // Guard
+
+        if (list.length === 0) {
+            container.innerHTML = '<p style="font-size: 0.9rem; color: var(--secondary-text); padding: 1rem;">No se encontraron destinos.</p>';
+            return;
+        }
+
+        let html = '';
+        list.forEach(d => {
+            const isChecked = selectedIds.has(String(d.id_destino)) ? 'checked' : '';
+            html += `
+                <label class="destination-option-row">
+                    <input type="checkbox" name="destinos" value="${d.id_destino}" ${isChecked} onchange="toggleDestinoSelection(this)">
+                    <div class="destination-row-content">
+                        <div class="destination-info">
+                            <span class="destination-title">${d.nombre}</span>
+                            <span class="destination-sub">${d.ciudad}, ${d.pais}</span>
+                        </div>
+                        <div class="custom-checkbox"></div>
+                    </div>
+                </label>
+            `;
+        });
+        container.innerHTML = html;
+    };
+
+    // Filter & Sort Logic
+    window.filterDestinos = () => {
+        const searchVal = document.getElementById('dest-search').value.toLowerCase();
+        const sortVal = document.getElementById('dest-sort').value;
+        const regionVal = document.getElementById('dest-region').value;
+
+        let filtered = allDestinos.filter(d => {
+            const matchesSearch = d.nombre.toLowerCase().includes(searchVal) ||
+                d.ciudad.toLowerCase().includes(searchVal) ||
+                d.pais.toLowerCase().includes(searchVal);
+            const matchesRegion = regionVal === 'all' || getContinent(d.pais) === regionVal;
+            return matchesSearch && matchesRegion;
+        });
+
+        // Sorting
+        if (sortVal === 'az') {
+            filtered.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        } else if (sortVal === 'za') {
+            filtered.sort((a, b) => b.nombre.localeCompare(a.nombre));
+        } else if (sortVal === 'pais') {
+            filtered.sort((a, b) => a.pais.localeCompare(b.pais));
+        }
+
+        renderList(filtered);
+    };
+
+    // Global helper for checkbox state persistence
+    window.toggleDestinoSelection = (checkbox) => {
+        if (checkbox.checked) selectedIds.add(checkbox.value);
+        else selectedIds.delete(checkbox.value);
+    };
+
+    try {
+        const res = await fetch('/api/destinos');
+        allDestinos = await res.json();
+    } catch (e) {
+        console.error("Error loading destinations", e);
+    }
+
     content.innerHTML = `
-        <div class="create-form-container">
+        <div class="create-form-container" style="max-width: 600px;">
             <h3 style="margin-bottom: 1.5rem;">Nuevo Paquete</h3>
             <form onsubmit="createPaquete(event)" class="create-form">
-                <label for="p-salida" style="align-self: center; width: 100%; max-width: 400px; text-align: left;">Fecha Salida</label>
-                <input type="date" id="p-salida" required>
-                <label for="p-llegada" style="align-self: center; width: 100%; max-width: 400px; text-align: left;">Fecha Llegada</label>
-                <input type="date" id="p-llegada" required>
-                <input type="number" id="p-costo" placeholder="Costo Base" required>
-                <input type="number" id="p-cupos" placeholder="Cupos" required>
-                <div style="margin-top: 1rem;">
-                    <button type="submit" class="btn-primary">Guardar</button>
-                    <button type="button" onclick="loadPaquetes()" class="btn-secondary">Cancelar</button>
+                <div style="display: flex; gap: 1rem; width: 100%; max-width: 500px;">
+                    <div style="flex: 1;">
+                        <label for="p-salida" style="display:block; text-align: left; margin-bottom: 0.5rem; font-size: 0.9rem;">Fecha Salida</label>
+                        <input type="date" id="p-salida" required style="margin: 0;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="p-llegada" style="display:block; text-align: left; margin-bottom: 0.5rem; font-size: 0.9rem;">Fecha Llegada</label>
+                        <input type="date" id="p-llegada" required style="margin: 0;">
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; width: 100%; max-width: 500px;">
+                    <input type="number" id="p-costo" placeholder="Costo Base" required style="flex: 1;">
+                    <input type="number" id="p-cupos" placeholder="Cupos" required style="flex: 1;">
+                </div>
+                
+                <div style="width: 100%; max-width: 480px; margin: 0.5rem auto;">
+                    <label style="display: block; text-align: center; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: var(--secondary-text);">Seleccionar Destinos</label>
+                    
+                    <div class="destination-controls">
+                        <input type="text" id="dest-search" class="destination-search" placeholder="Buscar destino..." onkeyup="filterDestinos()">
+                        
+                        <select id="dest-region" class="destination-filter" onchange="filterDestinos()">
+                            <option value="all">Todo el Mundo</option>
+                            <option value="Sudamérica">Sudamérica</option>
+                            <option value="Norteamérica">Norteamérica</option>
+                            <option value="Europa">Europa</option>
+                            <option value="Asia">Asia</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                        
+                         <select id="dest-sort" class="destination-filter" onchange="filterDestinos()">
+                            <option value="az">A - Z</option>
+                            <option value="za">Z - A</option>
+                            <option value="pais">Por País</option>
+                        </select>
+                    </div>
+
+                    <div id="destinos-list-container" class="destinations-list-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; width: 100%; max-width: 500px; display: flex; gap: 1rem;">
+                    <button type="submit" class="btn-primary" style="flex: 1;">Guardar Paquete</button>
+                    <button type="button" onclick="loadPaquetes()" class="btn-secondary" style="flex: 1;">Cancelar</button>
                 </div>
             </form>
         </div>
     `;
+
+    // Initial Render
+    filterDestinos();
 }
 
 async function createPaquete(e) {
     e.preventDefault();
+
+    // Get selected destinations
+    const checkboxes = document.querySelectorAll('input[name="destinos"]:checked');
+    const selectedDestinos = Array.from(checkboxes).map(cb => cb.value);
+
+    if (selectedDestinos.length === 0) {
+        alert('Debes seleccionar al menos un destino.');
+        return;
+    }
+
     const data = {
         fecha_salida: document.getElementById('p-salida').value,
         fecha_llegada: document.getElementById('p-llegada').value,
         costo_destino: document.getElementById('p-costo').value,
-        cupos: document.getElementById('p-cupos').value
+        cupos: document.getElementById('p-cupos').value,
+        destinos: selectedDestinos
     };
 
     const res = await fetch('/api/paquetes', {
@@ -690,8 +823,13 @@ async function createPaquete(e) {
         body: JSON.stringify(data)
     });
 
-    if (res.ok) loadPaquetes();
-    else alert('Error creando paquete');
+    const result = await res.json();
+
+    if (res.ok) {
+        loadPaquetes();
+    } else {
+        alert('Error creando paquete: ' + (result.message || 'Error desconocido'));
+    }
 }
 
 async function deletePaquete(id) {
