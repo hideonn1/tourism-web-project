@@ -282,6 +282,10 @@ function formatDateToSpanishLong(dateStr) {
     return `${dayName} ${dayNum} de ${monthName} del ${year}`;
 }
 
+function formatCurrencyCLP(amount) {
+    return Number(amount).toLocaleString('es-CL');
+}
+
 // Admin Logic
 
 async function loadDestinos() {
@@ -369,7 +373,7 @@ async function loadPaquetes() {
             card.innerHTML = `
                 <h4>Paquete #${p.id_paquete}</h4>
                 <p><strong>Fechas:</strong> ${formatDateToSpanishLong(p.fecha_salida)} hasta el ${formatDateToSpanishLong(p.fecha_llegada)}</p>
-                <p><strong>Costo:</strong> $${p.costo_destino}</p>
+                <p><strong>Costo:</strong> $${formatCurrencyCLP(p.costo_destino)}</p>
                 <p><strong>Cupos:</strong> ${p.cupos}</p>
                 <div class="destinos-list">
                     <strong>Destinos:</strong>
@@ -445,7 +449,7 @@ async function loadAvailablePackages() {
                     <h4>Paquete #${p.id_paquete}</h4>
                     <p><strong>Salida:</strong> ${p.fecha_salida}</p>
                     <p><strong>Llegada:</strong> ${p.fecha_llegada}</p>
-                    <p><strong>Costo:</strong> $${p.costo_destino}</p>
+                    <p><strong>Costo:</strong> $${formatCurrencyCLP(p.costo_destino)}</p>
                     <p><strong>Cupos:</strong> ${p.cupos}</p>
                     <div class="destinos-list">
                         <strong>Destinos:</strong>
