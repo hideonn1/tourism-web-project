@@ -447,8 +447,8 @@ async function loadAvailablePackages() {
                 <img src="${imageUrl}" class="card-img-top" alt="Paquete Turístico" loading="lazy">
                 <div class="card-content">
                     <h4>Paquete #${p.id_paquete}</h4>
-                    <p><strong>Salida:</strong> ${p.fecha_salida}</p>
-                    <p><strong>Llegada:</strong> ${p.fecha_llegada}</p>
+                    <p><strong>Salida:</strong> ${formatDateToSpanishLong(p.fecha_salida)}</p>
+                    <p><strong>Llegada:</strong> ${formatDateToSpanishLong(p.fecha_llegada)}</p>
                     <p><strong>Costo:</strong> $${formatCurrencyCLP(p.costo_destino)}</p>
                     <p><strong>Cupos:</strong> ${p.cupos}</p>
                     <div class="destinos-list">
