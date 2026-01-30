@@ -264,6 +264,24 @@ function applyTransition(elementId) {
     content.classList.add('admin-transition');
 }
 
+function formatDateToSpanishLong(dateStr) {
+    if (!dateStr) return '';
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+    // Ensure we get the correct day of week for the specific date
+    // Note: creating Date with (Y, M, D) uses local time 00:00:00. 
+    // This is generally safe for finding the day of the week of a specific calendar date.
+    const dayName = days[date.getDay()];
+    const dayNum = String(day).padStart(2, '0');
+    const monthName = months[date.getMonth()];
+
+    return `${dayName} ${dayNum} de ${monthName} del ${year}`;
+}
+
 // Admin Logic
 
 async function loadDestinos() {
@@ -350,7 +368,7 @@ async function loadPaquetes() {
             card.className = 'card';
             card.innerHTML = `
                 <h4>Paquete #${p.id_paquete}</h4>
-                <p><strong>Fechas:</strong> ${p.fecha_salida} - ${p.fecha_llegada}</p>
+                <p><strong>Fechas:</strong> ${formatDateToSpanishLong(p.fecha_salida)} hasta el ${formatDateToSpanishLong(p.fecha_llegada)}</p>
                 <p><strong>Costo:</strong> $${p.costo_destino}</p>
                 <p><strong>Cupos:</strong> ${p.cupos}</p>
                 <div class="destinos-list">
