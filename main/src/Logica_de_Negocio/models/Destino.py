@@ -17,8 +17,8 @@ class Destino():
         self.descripcion = descripcion
         self.actividades_disponibles = actividades_disponibles
         self.orden_visita = orden_visita
-        self.fecha_salida = fecha_llegada
-        self.fecha_llegada = fecha_salida
+        self.fecha_salida = fecha_salida
+        self.fecha_llegada = fecha_llegada
 
     def __str__(self):
         return (

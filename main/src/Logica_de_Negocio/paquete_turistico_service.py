@@ -35,6 +35,8 @@ class Paquete_Service:
     def agregar_destino_a_paquete(self, paquete, destino):
         orden_visita = self._repo.get_ultimo_orden_visita(paquete.id_paquete) + 1
         destino.orden_visita = orden_visita
+        destino.fecha_llegada = paquete.fecha_llegada
+        destino.fecha_salida = paquete.fecha_salida
         multiplicador = self.obtener_multiplicador(paquete.fecha_salida)
         self._repo.destino_x_paquete(paquete,destino)
         if destino.pais != "Chile":
