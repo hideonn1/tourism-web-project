@@ -10,8 +10,17 @@ from src.Datos.reserva_repository import Reservas_Repository
 from src.Logica_de_Negocio.reservas_service import Reservas_Service
 from mysql.connector import Error
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key =  'CLAVE_ELIMINADA_POR_SEGURIDAD'# Cambiar en produccion
+app.secret_key = os.getenv('SECRET_KEY') # Loaded from .env
+
+# Configurar Session Interface Encriptada (AES-GCM)
+from src.Utils.encrypted_session import EncryptedCookieSessionInterface
+app.session_interface = EncryptedCookieSessionInterface()
 
 # Repositorios y Servicios
 usuario_repo = Usuario_Repository(conectar_db)

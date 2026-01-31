@@ -1,7 +1,7 @@
 from .models.Usuario import Usuario
 from datetime import date
 import re
-from src.Utils.logger import log_change
+
 import bcrypt
 
 class Usuario_Service:
@@ -137,7 +137,7 @@ class Usuario_Service:
         
         # Log and Update Email
         if nuevo_email and nuevo_email != usuario.email:
-            log_change(id_usuario, 'email', usuario.email, nuevo_email)
+            # log_change(id_usuario, 'email', usuario.email, nuevo_email)
             usuario.email = nuevo_email
         
         if nuevo_telefono:
@@ -146,7 +146,7 @@ class Usuario_Service:
                 raise ValueError("Formato de teléfono inválido. Debe ser: +56 9 1234 5678")
             
             if nuevo_telefono != usuario.telefono:
-                log_change(id_usuario, 'telefono', usuario.telefono, nuevo_telefono)
+                # log_change(id_usuario, 'telefono', usuario.telefono, nuevo_telefono)
                 usuario.telefono = nuevo_telefono
             
         # Persist changes
