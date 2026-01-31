@@ -1004,7 +1004,19 @@ async function updateProfile(e) {
     }
 }
 
-function checkSession() {
-    // This could check a session endpoint if created, for now we rely on login
-    // Ideally we'd hit /api/me or similar to see if user is already logged in on refresh
+async function checkSession() {
+    try {
+        const res = await fetch('/api/me');
+        const data = await res.json();
+
+        if (data.success) {
+            state.user = data.usuario;
+            updateNav();
+            showSection('home');
+        } else {
+            showSection('home');
+        }
+    } catch (e) {
+        showSection('home');
+    }
 }
