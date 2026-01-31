@@ -60,6 +60,7 @@
             </div>
             <div class="nav-links">
                 <a href="#" id="nav-home" onclick="showHome()">Inicio</a>
+                <a href="#" id="nav-destinos" onclick="showPublicDestinos()">Destinos</a>
                 <a href="#" id="nav-login" onclick="showSection('login')">Iniciar sesión</a>
                 <a href="#" id="nav-dashboard" style="display: none;" onclick="showProfile()">Mi Cuenta</a>
                 <a href="#" id="nav-logout" style="display: none;" onclick="logout()">Cerrar sesión</a>
@@ -91,6 +92,17 @@
             </div>
         </section>
 
+        <section id="public-destinos" class="section">
+            <div class="hero" style="min-height: 40vh;">
+                <h1>Nuestros Destinos</h1>
+                <p class="hero-subtitle">Conoce los lugares maravillosos que tenemos para ti.</p>
+            </div>
+            <div id="public-destinos-content" class="content-grid"
+                style="padding: 2rem; max-width: 1200px; margin: 0 auto; gap: 2rem;">
+                <!-- Dynamic Content Here -->
+            </div>
+        </section>
+
         <section id="login" class="section">
             <!-- Decorative Bubbles -->
             <div class="bubble bubble-1"></div>
@@ -117,7 +129,7 @@
                 </form>
                 <p id="login-error" class="error-msg"></p>
                 <div style="margin-top: 1.5rem; text-align: center;">
-                    <button class="btn-text" onclick="showSection('register')" >Si no tienes una cuenta, regístrate
+                    <button class="btn-text" onclick="showSection('register')">Si no tienes una cuenta, regístrate
                         aquí</button>
                 </div>
             </div>

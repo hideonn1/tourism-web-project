@@ -76,6 +76,11 @@ function showSection(sectionId) {
         if (navHome) navHome.style.display = 'none';
     }
 
+    if (sectionId === 'public-destinos') {
+        const navDestinos = document.getElementById('nav-destinos');
+        if (navDestinos) navDestinos.style.display = 'none';
+    }
+
     // Update Title dynamically
     switch (sectionId) {
         case 'home': document.title = 'Explora360 Chile | Viajes y Turismo'; break;
@@ -84,6 +89,7 @@ function showSection(sectionId) {
         case 'admin-dashboard': updateTitle('Panel de Administración'); break;
         case 'client-dashboard': updateTitle('Panel de Cliente'); break;
         case 'profile-section': updateTitle('Mi Perfil'); break;
+        case 'public-destinos': updateTitle('Nuestros Destinos'); break;
     }
 }
 
@@ -91,11 +97,13 @@ function updateNav() {
     if (state.user) {
         document.getElementById('nav-home').style.display = 'none';
         document.getElementById('nav-login').style.display = 'none';
+        document.getElementById('nav-destinos').style.display = 'none';
         document.getElementById('nav-dashboard').style.display = 'inline-block';
         document.getElementById('nav-logout').style.display = 'inline-block';
     } else {
         document.getElementById('nav-home').style.display = 'inline-block';
         document.getElementById('nav-login').style.display = 'inline-block';
+        document.getElementById('nav-destinos').style.display = 'inline-block';
         document.getElementById('nav-dashboard').style.display = 'none';
         document.getElementById('nav-logout').style.display = 'none';
     }
@@ -460,6 +468,59 @@ async function loadAvailablePackages() {
                             ${p.cupos > 0 ? 'Reservar' : 'Agotado'}
                         </button>
                     </div>
+                </div>
+            `;
+            content.appendChild(card);
+        });
+    } catch (e) {
+        content.innerHTML = `<p class="error-msg">Error: ${e.message}</p>`;
+    }
+}
+
+// Public Destinos Logic
+
+function showPublicDestinos() {
+    showSection('public-destinos');
+    loadPublicDestinos();
+}
+
+async function loadPublicDestinos() {
+    updateTitle('Nuestros Destinos');
+    const content = document.getElementById('public-destinos-content');
+
+    // Smooth transition
+    content.classList.remove('fade-in');
+    void content.offsetWidth;
+    content.classList.add('fade-in');
+
+    content.innerHTML = '<p style="text-align:center; width:100%;">Cargando destinos...</p>';
+
+    try {
+        const res = await fetch('/api/destinos');
+        const destinos = await res.json();
+
+        content.innerHTML = '';
+
+        if (destinos.length === 0) {
+            content.innerHTML = '<p style="text-align:center; width:100%;">No hay destinos disponibles por el momento.</p>';
+            return;
+        }
+
+        destinos.forEach(d => {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            // Clean names for URL
+            const queryName = encodeURIComponent(d.nombre + ' ' + d.pais + ' landscape');
+            const imageUrl = `https://image.pollinations.ai/prompt/${queryName}?width=400&height=250&nologo=true`;
+
+            card.innerHTML = `
+                <img src="${imageUrl}" class="card-img-top" alt="${d.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image'">
+                <div class="card-content">
+                    <h4>${d.nombre}</h4>
+                    <p><strong>Ubicación:</strong> ${d.ciudad}, ${d.pais}</p>
+                    <p class="card-desc">${d.descripcion}</p>
+                    <p class="card-activities"><strong>Actividades:</strong> ${d.actividades_disponibles}</p>
                 </div>
             `;
             content.appendChild(card);
