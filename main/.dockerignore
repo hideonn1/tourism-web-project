@@ -1,0 +1,20 @@
+# Entornos virtuales y dependencias locales
+venv/
+env/
+.env
+
+# Archivos compilados de Python (evitan conflictos de arquitectura)
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Archivos de sistema y de IDE
+.DS_Store
+
+# Git
+.git
+.gitignore
+
+# Archivos de base de datos
+sql/*.sql

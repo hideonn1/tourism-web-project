@@ -1,0 +1,25 @@
+# 1. Imagen base oficial de Python (liviana)
+FROM python:3.11-slim
+
+# 2. Instalar dependencias del sistema necesarias para MySQL
+RUN apt-get update && apt-get install -y \
+    gcc \
+    default-libmysqlclient-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# 3. Directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# 4. Copiar e instalar librerías (primero requirements para usar caché)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 5. Copiar todo el código del proyecto
+COPY . .
+
+# 6. Puerto que usará Flask
+EXPOSE 5000
+
+# 7. Comando para iniciar la aplicación
+CMD ["python", "app.py"]

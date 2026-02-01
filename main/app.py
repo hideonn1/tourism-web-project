@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY') # Loaded from .env
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # Configurar Session Interface Encriptada (AES-GCM)
 from src.Utils.encrypted_session import EncryptedCookieSessionInterface
@@ -314,4 +314,4 @@ def mis_reservas():
         return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
