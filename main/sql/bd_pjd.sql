@@ -275,7 +275,9 @@ INSERT INTO `usuario` (`id_usuario`, `rut`, `nombres`, `apellido_paterno`, `apel
 -- Indexes for table `destino`
 --
 ALTER TABLE `destino`
-  ADD PRIMARY KEY (`id_destino`);
+  ADD PRIMARY KEY (`id_destino`),
+  ADD INDEX `idx_destino_pais` (`pais`),    -- NUEVO: Optimización de búsqueda
+  ADD INDEX `idx_destino_ciudad` (`ciudad`); -- NUEVO: Optimización de búsqueda
 
 --
 -- Indexes for table `destino_has_paquete_turistico`
@@ -288,7 +290,9 @@ ALTER TABLE `destino_has_paquete_turistico`
 -- Indexes for table `paquete_turistico`
 --
 ALTER TABLE `paquete_turistico`
-  ADD PRIMARY KEY (`id_paquete_turistico`);
+  ADD PRIMARY KEY (`id_paquete_turistico`),
+  ADD INDEX `idx_paquete_modalidad` (`modalidad`), -- NUEVO: Filtro eficiente
+  ADD INDEX `idx_paquete_fecha` (`fecha_inicio`);   -- NUEVO: Orden cronológico rápido
 
 --
 -- Indexes for table `reserva`
@@ -308,7 +312,9 @@ ALTER TABLE `reserva_has_paquete_turistico`
 -- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`id_usuario`);
+  ADD PRIMARY KEY (`id_usuario`),
+  ADD UNIQUE KEY `email_unique` (`email`), -- NUEVO: Seguridad y Velocidad de Login
+  ADD UNIQUE KEY `rut_unique` (`rut`);      -- NUEVO: Integridad de identidad única
 
 --
 -- AUTO_INCREMENT for dumped tables
