@@ -57,10 +57,13 @@ function updateThemeIcon(isLight) {
 }
 
 function showSection(sectionId) {
+    const target = document.getElementById(sectionId);
+    if (!target) return;
+
     document.querySelectorAll('.section').forEach(sec => {
         sec.classList.remove('active');
     });
-    document.getElementById(sectionId).classList.add('active');
+    target.classList.add('active');
 
     // Reset Nav to default state based on user status
     updateNav();
@@ -94,14 +97,17 @@ function showSection(sectionId) {
 }
 
 function updateNav() {
+    const navHome = document.getElementById('nav-home');
+    if (!navHome) return; // Exit if nav elements don't exist (e.g. secondary pages)
+
     if (state.user) {
-        document.getElementById('nav-home').style.display = 'none';
+        navHome.style.display = 'none';
         document.getElementById('nav-login').style.display = 'none';
         document.getElementById('nav-destinos').style.display = 'none';
         document.getElementById('nav-dashboard').style.display = 'inline-block';
         document.getElementById('nav-logout').style.display = 'inline-block';
     } else {
-        document.getElementById('nav-home').style.display = 'inline-block';
+        navHome.style.display = 'inline-block';
         document.getElementById('nav-login').style.display = 'inline-block';
         document.getElementById('nav-destinos').style.display = 'inline-block';
         document.getElementById('nav-dashboard').style.display = 'none';
@@ -1009,14 +1015,38 @@ async function checkSession() {
         const res = await fetch('/api/me');
         const data = await res.json();
 
+        // Check for deep link
+        const urlParams = new URLSearchParams(window.location.search);
+        const sectionParam = urlParams.get('section');
+
+        let targetSection = 'home';
+        if (sectionParam) {
+            // Clean section to avoid XSS issues implicitly, verify it exists first
+            if (document.getElementById(sectionParam)) {
+                targetSection = sectionParam;
+            }
+        }
+
         if (data.success) {
             state.user = data.usuario;
             updateNav();
-            showSection('home');
+            // If logged in but user specifically asked for login, maybe redirect to dashboard
+            if (targetSection === 'login') {
+                showDashboard();
+            } else {
+                if (document.getElementById(targetSection)) {
+                    showSection(targetSection);
+                }
+            }
         } else {
-            showSection('home');
+            // Not logged in
+            if (document.getElementById(targetSection)) {
+                showSection(targetSection);
+            }
         }
     } catch (e) {
-        showSection('home');
+        if (document.getElementById('home')) {
+            showSection('home');
+        }
     }
 }
