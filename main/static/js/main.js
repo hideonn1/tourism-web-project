@@ -525,6 +525,8 @@ async function loadAvailablePackages() {
 
 // Public Destinos Logic
 
+// Public Destinos Logic (Apple-Style Scroll view)
+
 function showPublicDestinos() {
     showSection('public-destinos');
     loadPublicDestinos();
@@ -532,51 +534,57 @@ function showPublicDestinos() {
 
 async function loadPublicDestinos() {
     updateTitle('Nuestros Destinos');
-    const content = document.getElementById('public-destinos-content');
+    const section = document.getElementById('public-destinos');
 
-    // Smooth transition
-    content.classList.remove('fade-in');
-    void content.offsetWidth;
-    content.classList.add('fade-in');
+    // Replace entire section content with scroll wrapper
+    section.innerHTML = `
+        <div class="destinations-scroll-wrapper" id="dest-scroll-wrapper">
+            <p style="text-align:center; padding-top: 50vh; color:white; font-size:1.5rem;">Descubriendo lugares...</p>
+        </div>
+    `;
 
-    content.innerHTML = '<p style="text-align:center; width:100%;">Cargando destinos...</p>';
+    const wrapper = document.getElementById('dest-scroll-wrapper');
 
     try {
         const res = await fetch('/api/destinos');
         const destinos = await res.json();
 
-        content.innerHTML = '';
-
         if (destinos.length === 0) {
-            content.innerHTML = '<p style="text-align:center; width:100%;">No hay destinos disponibles por el momento.</p>';
+            wrapper.innerHTML = '<p style="text-align:center; padding-top: 50vh; color:white;">No hay destinos disponibles por el momento.</p>';
             return;
         }
 
-        destinos.forEach(d => {
-            const card = document.createElement('div');
-            card.className = 'card';
+        wrapper.innerHTML = ''; // Clear loading
 
-            // Clean names for URL (Local WebP - Kebab Case)
+        destinos.forEach(d => {
+            const item = document.createElement('div');
+            item.className = 'destination-section';
+
+            // Clean names for URL
             const slug = d.nombre.toLowerCase()
                 .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .replace(/ /g, '-')
                 .replace(/[^\w-]+/g, '')
                 .replace(/-+/g, '-');
-            const imageUrl = `/static/img/${slug}.webp`;
 
-            card.innerHTML = `
-                <img src="${imageUrl}" class="card-img-top" alt="${d.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image'">
-                <div class="card-content">
-                    <h4>${d.nombre}</h4>
-                    <p><strong>Ubicación:</strong> ${d.ciudad}, ${d.pais}</p>
-                    <p class="card-desc">${d.descripcion}</p>
-                    <p class="card-activities"><strong>Actividades:</strong> ${d.actividades_disponibles}</p>
+            // Format cost if available (assuming generic cost or removing price tag if not in model)
+            // Note: Destinos model might not have 'costo', Paquetes do. 
+            // Checking previous code: 'costo' is usually in Paquetes. Destinos have 'nombre', 'ciudad', 'pais', 'descripcion'.
+            // I will omit price if not present, or just show description.
+
+            item.innerHTML = `
+                <img src="/static/img/${slug}.webp" class="dest-bg-img" alt="${d.nombre}" loading="lazy" onerror="this.src='/static/img/default.webp'">
+                <div class="dest-overlay-gradient"></div>
+                <div class="dest-info-content">
+                     <h2>${d.nombre}</h2>
+                     <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 1rem;">${d.ciudad}, ${d.pais}</p>
+                     <p>${d.descripcion}</p>
                 </div>
             `;
-            content.appendChild(card);
+            wrapper.appendChild(item);
         });
     } catch (e) {
-        content.innerHTML = `<p class="error-msg">Error: ${e.message}</p>`;
+        section.innerHTML = `<p class="error-msg" style="margin-top: 5rem;">Error: ${e.message}</p>`;
     }
 }
 
