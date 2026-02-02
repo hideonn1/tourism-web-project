@@ -1151,3 +1151,60 @@ function handleGalleryKeys(e) {
     if (e.key === 'ArrowRight') nextImage();
     if (e.key === 'ArrowLeft') prevImage();
 }
+
+// Home Carousel Logic
+function showHome() {
+    showSection('home');
+    // Re-check carousel if needed, though initHomeCarousel runs on load
+}
+
+function initHomeCarousel() {
+    // Only run on home page
+    if (!document.getElementById('home-carousel')) return;
+    loadHomeCarousel();
+}
+
+async function loadHomeCarousel() {
+    const track = document.getElementById('home-carousel');
+    if (!track) return;
+
+    // Create inner track for scrolling
+    track.innerHTML = '<div class="carousel-track" id="carousel-track"></div>';
+    const innerTrack = document.getElementById('carousel-track');
+
+    try {
+        const res = await fetch('/api/destinos');
+        const destinos = await res.json();
+
+        if (destinos.length === 0) return;
+
+        // Create cards
+        const createCard = (d) => {
+            const slug = d.nombre.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .replace(/ /g, '-')
+                .replace(/[^\w-]+/g, '')
+                .replace(/-+/g, '-');
+            return `
+                <div class="carousel-item">
+                    <img src="/static/img/${slug}.webp" alt="${d.nombre}" loading="lazy" onerror="this.src='/static/img/default.webp'">
+                    <div class="carousel-caption">
+                        <div>${d.nombre}</div>
+                        <div style="font-size: 0.8rem; font-weight: normal;">${d.pais}</div>
+                    </div>
+                </div>
+            `;
+        };
+
+        // Triple the content for smooth infinite loop
+        const itemsHtml = destinos.map(d => createCard(d)).join('');
+        innerTrack.innerHTML = itemsHtml + itemsHtml + itemsHtml;
+
+    } catch (e) {
+        console.error('Error loading carousel:', e);
+        track.style.display = 'none';
+    }
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', initHomeCarousel);
