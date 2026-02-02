@@ -29,6 +29,9 @@ services:
       - DB_NAME=${DB_NAME}
       - FLASK_ENV=development
       - SECRET_KEY=${SECRET_KEY}
-
+    volumes:
+      - .:/app
+      - ./static/img:/app/static/img
+      - /app/venv
 volumes:
   db_data:

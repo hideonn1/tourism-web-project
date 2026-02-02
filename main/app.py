@@ -9,6 +9,7 @@ from src.Logica_de_Negocio.paquete_turistico_service import Paquete_Service
 from src.Datos.reserva_repository import Reservas_Repository
 from src.Logica_de_Negocio.reservas_service import Reservas_Service
 from mysql.connector import Error
+from src.Utils.img_conversor_tool import procesar_todas_las_imagenes
 
 import os
 from dotenv import load_dotenv
@@ -312,6 +313,25 @@ def mis_reservas():
     except Exception as e:
         print(e)
         return jsonify({'success': False, 'message': str(e)}), 500
+
+
+FOLDER_ORIGINALS = os.path.join('static', 'img', 'original-photo-web')
+FOLDER_OPTIMIZED = os.path.join('static', 'img')
+
+os.makedirs(FOLDER_ORIGINALS, exist_ok=True)
+os.makedirs(FOLDER_OPTIMIZED, exist_ok=True)
+
+@app.route('/api/convertir-imagenes', methods=['POST'])
+def convertir_imagenes():
+    if session.get('rol') != 'Administrador':
+        return jsonify({'success': False, 'message': 'No autorizado'}), 403
+    try:
+        procesar_todas_las_imagenes()
+        return jsonify({'success': True, 'message': 'Imagenes convertidas exitosamente'})
+    except Exception as e:
+        print(e)
+        return jsonify({'success': False, 'message': str(e)}), 500 
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

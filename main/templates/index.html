@@ -52,6 +52,17 @@
             </div>
         </div>
 
+        <!-- Image Gallery Modal -->
+        <div id="gallery-modal" class="gallery-overlay">
+            <button class="gallery-close" onclick="closeGallery()">&times;</button>
+            <button class="gallery-nav prev" onclick="prevImage()">&#10094;</button>
+            <div class="gallery-content">
+                <img id="gallery-image" src="" alt="Gallery Image">
+                <p id="gallery-caption"></p>
+            </div>
+            <button class="gallery-nav next" onclick="nextImage()">&#10095;</button>
+        </div>
+
         <!-- Navigation -->
         <nav class="navbar">
             <div class="logo">

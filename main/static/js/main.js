@@ -4,7 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const state = {
-    user: null
+    user: null,
+    currentPaquetes: [],
+    galleryImages: [],
+    galleryIndex: 0
 };
 
 // Helper to update page title
@@ -327,10 +330,12 @@ async function loadDestinos() {
         destinos.forEach(d => {
             const card = document.createElement('div');
             card.className = 'card';
-
-            // Clean names for URL
-            const queryName = encodeURIComponent(d.nombre + ' ' + d.pais + ' landscape');
-            const imageUrl = `https://image.pollinations.ai/prompt/${queryName}?width=400&height=250&nologo=true`;
+            const slug = d.nombre.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove accents
+                .replace(/ /g, '-')
+                .replace(/[^\w-]+/g, '')
+                .replace(/-+/g, '-');
+            const imageUrl = `/static/img/${slug}.webp`;
 
             card.innerHTML = `
                 <img src="${imageUrl}" class="card-img-top" alt="${d.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image'">
@@ -367,7 +372,8 @@ async function loadPaquetes() {
 
     try {
         const res = await fetch('/api/paquetes');
-        const paquetes = await res.json();
+        state.currentPaquetes = await res.json();
+        const paquetes = state.currentPaquetes;
 
         const list = document.getElementById('paquetes-list');
         list.className = 'content-area';
@@ -382,9 +388,30 @@ async function loadPaquetes() {
             }
             destinosHtml += '</ul>';
 
+            // Collage Logic
+            let collageHtml = '';
+            if (p.destinos && p.destinos.length > 0) {
+                const maxDestinos = p.destinos.slice(0, 4);
+                collageHtml = `<div class="package-collage items-${maxDestinos.length}">`;
+                maxDestinos.forEach((d, index) => {
+                    const slug = d.nombre.toLowerCase()
+                        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                        .replace(/ /g, '-')
+                        .replace(/[^\w-]+/g, '')
+                        .replace(/-+/g, '-');
+                    collageHtml += `<img src="/static/img/${slug}.webp" alt="${d.nombre}" loading="lazy" 
+                        onclick="openPackageGallery(${p.id_paquete}, ${index})" style="cursor: pointer;">`;
+                });
+                collageHtml += `</div>`;
+            } else {
+                collageHtml = `<div class="package-collage items-1"><img src="/static/img/default.webp" alt="Default"></div>`;
+            }
+
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
+                ${collageHtml}
+                <div class="card-content">
                 <h4>Paquete #${p.id_paquete}</h4>
                 <p><strong>Fechas:</strong> ${formatDateToSpanishLong(p.fecha_salida)} hasta el ${formatDateToSpanishLong(p.fecha_llegada)}</p>
                 <p><strong>Costo:</strong> $${formatCurrencyCLP(p.costo_destino)}</p>
@@ -395,6 +422,7 @@ async function loadPaquetes() {
                 </div>
                  <div class="card-actions">
                     <button onclick="deletePaquete(${p.id_paquete})" class="btn-danger">Eliminar</button>
+                </div>
                 </div>
             `;
             list.appendChild(card);
@@ -434,7 +462,8 @@ async function loadAvailablePackages() {
 
     try {
         const res = await fetch('/api/paquetes');
-        const paquetes = await res.json();
+        state.currentPaquetes = await res.json();
+        const paquetes = state.currentPaquetes;
 
         content.innerHTML = '';
 
@@ -447,18 +476,29 @@ async function loadAvailablePackages() {
             }
             destinosHtml += '</ul>';
 
-            // Initial image from first destination or generic travel
-            let imageUrl = 'https://image.pollinations.ai/prompt/travel%20vacation%20landscape?width=400&height=250&nologo=true';
+            // Collage Logic
+            let collageHtml = '';
             if (p.destinos && p.destinos.length > 0) {
-                const firstD = p.destinos[0];
-                const queryName = encodeURIComponent(firstD.nombre + ' ' + firstD.ciudad + ' travel');
-                imageUrl = `https://image.pollinations.ai/prompt/${queryName}?width=400&height=250&nologo=true`;
+                const maxDestinos = p.destinos.slice(0, 4);
+                collageHtml = `<div class="package-collage items-${maxDestinos.length}">`;
+                maxDestinos.forEach((d, index) => {
+                    const slug = d.nombre.toLowerCase()
+                        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                        .replace(/ /g, '-')
+                        .replace(/[^\w-]+/g, '')
+                        .replace(/-+/g, '-');
+                    collageHtml += `<img src="/static/img/${slug}.webp" alt="${d.nombre}" loading="lazy" 
+                        onclick="openPackageGallery(${p.id_paquete}, ${index})" style="cursor: pointer;">`;
+                });
+                collageHtml += `</div>`;
+            } else {
+                collageHtml = `<div class="package-collage items-1"><img src="/static/img/default.webp" alt="Default"></div>`;
             }
 
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
-                <img src="${imageUrl}" class="card-img-top" alt="Paquete Turístico" loading="lazy">
+                ${collageHtml}
                 <div class="card-content">
                     <h4>Paquete #${p.id_paquete}</h4>
                     <p><strong>Salida:</strong> ${formatDateToSpanishLong(p.fecha_salida)}</p>
@@ -516,9 +556,13 @@ async function loadPublicDestinos() {
             const card = document.createElement('div');
             card.className = 'card';
 
-            // Clean names for URL
-            const queryName = encodeURIComponent(d.nombre + ' ' + d.pais + ' landscape');
-            const imageUrl = `https://image.pollinations.ai/prompt/${queryName}?width=400&height=250&nologo=true`;
+            // Clean names for URL (Local WebP - Kebab Case)
+            const slug = d.nombre.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .replace(/ /g, '-')
+                .replace(/[^\w-]+/g, '')
+                .replace(/-+/g, '-');
+            const imageUrl = `/static/img/${slug}.webp`;
 
             card.innerHTML = `
                 <img src="${imageUrl}" class="card-img-top" alt="${d.nombre}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image'">
@@ -1049,4 +1093,61 @@ async function checkSession() {
             showSection('home');
         }
     }
+}
+
+// Image Gallery Logic (Global Scope)
+function openPackageGallery(packageId, startIndex) {
+    const paquete = state.currentPaquetes.find(p => p.id_paquete === packageId);
+    if (!paquete || !paquete.destinos) return;
+
+    state.galleryImages = paquete.destinos.map(d => {
+        const slug = d.nombre.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/ /g, '-')
+            .replace(/[^\w-]+/g, '')
+            .replace(/-+/g, '-');
+        return {
+            src: `/static/img/${slug}.webp`,
+            caption: `${d.nombre}, ${d.pais}`
+        };
+    });
+
+    state.galleryIndex = startIndex;
+    showGallery();
+}
+
+function showGallery() {
+    const modal = document.getElementById('gallery-modal');
+    const img = document.getElementById('gallery-image');
+    const caption = document.getElementById('gallery-caption');
+    const current = state.galleryImages[state.galleryIndex];
+
+    img.src = current.src;
+    caption.innerText = current.caption;
+    modal.classList.add('active');
+
+    // Add keyboard support
+    document.addEventListener('keydown', handleGalleryKeys);
+}
+
+function closeGallery() {
+    const modal = document.getElementById('gallery-modal');
+    modal.classList.remove('active');
+    document.removeEventListener('keydown', handleGalleryKeys);
+}
+
+function nextImage() {
+    state.galleryIndex = (state.galleryIndex + 1) % state.galleryImages.length;
+    showGallery(); // Refresh view
+}
+
+function prevImage() {
+    state.galleryIndex = (state.galleryIndex - 1 + state.galleryImages.length) % state.galleryImages.length;
+    showGallery();
+}
+
+function handleGalleryKeys(e) {
+    if (e.key === 'Escape') closeGallery();
+    if (e.key === 'ArrowRight') nextImage();
+    if (e.key === 'ArrowLeft') prevImage();
 }
