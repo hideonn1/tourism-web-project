@@ -1017,8 +1017,15 @@ async function showProfile() {
         const data = await res.json();
 
         if (data.success) {
-            document.getElementById('prof-email').value = data.usuario.email;
-            document.getElementById('prof-phone').value = data.usuario.telefono || '';
+            const u = data.usuario;
+            // Populate Read-Only Fields
+            document.getElementById('prof-rut').value = u.rut;
+            document.getElementById('prof-nombres').value = u.nombres;
+            document.getElementById('prof-apellidos').value = `${u.apellido_paterno} ${u.apellido_materno || ''}`.trim();
+
+            // Populate Editable Fields
+            document.getElementById('prof-email').value = u.email;
+            document.getElementById('prof-phone').value = u.telefono || '';
             msg.innerText = '';
         } else {
             msg.innerText = 'Error cargando perfil: ' + data.message;

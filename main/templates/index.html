@@ -243,14 +243,41 @@
             <div class="auth-container">
                 <h2>Mi Cuenta</h2>
                 <form onsubmit="updateProfile(event)" id="profile-form">
-                    <label for="prof-email"
-                        style="display:block; text-align:left; margin-bottom:0.5rem; font-weight:600;">Email</label>
-                    <input type="email" id="prof-email" required>
 
-                    <label for="prof-phone"
-                        style="display:block; text-align:left; margin-bottom:0.5rem; font-weight:600;">Teléfono</label>
-                    <input type="tel" id="prof-phone" required pattern="\+56 9 [0-9]{4} [0-9]{4}"
-                        placeholder="+56 9 1234 5678" title="Formato: +56 9 1234 5678">
+                    <!-- Read Only Fields -->
+                    <label
+                        style="display:block; text-align:left; font-size:0.9rem; color:var(--secondary-text); margin-bottom:0.2rem;">RUT</label>
+                    <input type="text" id="prof-rut" readonly
+                        style="background: rgba(255,255,255,0.05); color: var(--secondary-text); cursor: not-allowed;">
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <div style="flex:1;">
+                            <label
+                                style="display:block; text-align:left; font-size:0.9rem; color:var(--secondary-text); margin-bottom:0.2rem;">Nombres</label>
+                            <input type="text" id="prof-nombres" readonly
+                                style="background: rgba(255,255,255,0.05); color: var(--secondary-text); cursor: not-allowed;">
+                        </div>
+                        <div style="flex:1;">
+                            <label
+                                style="display:block; text-align:left; font-size:0.9rem; color:var(--secondary-text); margin-bottom:0.2rem;">Apellidos</label>
+                            <input type="text" id="prof-apellidos" readonly
+                                style="background: rgba(255,255,255,0.05); color: var(--secondary-text); cursor: not-allowed;">
+                        </div>
+                    </div>
+
+                    <!-- Editable Fields -->
+                    <div style="margin-top: 1.5rem; border-top: 1px solid var(--secondary); padding-top: 1.5rem;">
+                        <h4 style="margin-bottom: 1rem; text-align: left;">Datos de Contacto</h4>
+
+                        <label for="prof-email"
+                            style="display:block; text-align:left; margin-bottom:0.5rem; font-weight:600;">Email</label>
+                        <input type="email" id="prof-email" required>
+
+                        <label for="prof-phone"
+                            style="display:block; text-align:left; margin-bottom:0.5rem; font-weight:600;">Teléfono</label>
+                        <input type="tel" id="prof-phone" required pattern="\+56 9 [0-9]{4} [0-9]{4}"
+                            placeholder="+56 9 1234 5678" title="Formato: +56 9 1234 5678">
+                    </div>
 
                     <div style="margin-top: 1rem; text-align:center;">
                         <button type="submit" class="btn-primary">Guardar Cambios</button>
