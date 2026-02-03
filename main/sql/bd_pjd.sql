@@ -11,7 +11,6 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -26,7 +25,50 @@ USE `bd_pjd`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `destino`
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `id_usuario` int(11) NOT NULL,
+  `rut` varchar(12) NOT NULL,
+  `nombres` varchar(80) NOT NULL,
+  `apellido_paterno` varchar(45) NOT NULL,
+  `apellido_materno` varchar(45) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `contraseña` varchar(255) NOT NULL,
+  `rol` varchar(20) NOT NULL,
+  `telefono` varchar(15) NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `fecha_registro` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id_usuario`, `rut`, `nombres`, `apellido_paterno`, `apellido_materno`, `email`, `contraseña`, `rol`, `telefono`, `fecha_nacimiento`, `fecha_registro`) VALUES
+(1, '12345678-9', 'Admin', 'Sistema', 'Principal', 'admin@admin.cl', '$2b$12$BpM6YxY9Mh6BaBllbSKO4OvH362uguAwyNqKrW3lvp9aeOHToPL4S', 'Administrador', '+56 9 1234 5678', '1990-01-01', '2025-11-29'),
+(2, '98765432-1', 'Cliente', 'Prueba', 'Test', 'cliente@cliente.cl', '$2b$12$cbxQoXJlzE9aFW9NRVHeMuljXIHv85rVxmSkc2afQEAgAyJloLyrC', 'Cliente', '+56 9 8765 4321', '1995-06-15', '2025-11-29'),
+(3, '20000000-5', 'Juanito', 'Navarrito', 'Carter', 'correo@correo.cl', '$2b$12$uJw6x0sA0xdRN3bWihkdV.aYEijnSnzqRAtOrrj.sFoMBXXFM0H.G', 'Cliente', '+56 9 3123 2323', '2000-09-23', '2025-12-01');
+
+-- --------------------------------------------------------
+
+--
+-- NUEVA: Estructura de tabla para la tabla `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `id_reset` int(11) NOT NULL,
+  `user_rut` varchar(12) NOT NULL,
+  `token_hash` varchar(64) NOT NULL, -- Almacena SHA-256 del token
+  `expires_at` datetime NOT NULL,
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `destino`
 --
 
 CREATE TABLE `destino` (
@@ -40,7 +82,7 @@ CREATE TABLE `destino` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `destino`
+-- Volcado de datos para la tabla `destino`
 --
 
 INSERT INTO `destino` (`id_destino`, `nombre`, `ciudad`, `pais`, `descripcion`, `actividades_disponibles`, `costo`) VALUES
@@ -78,90 +120,7 @@ INSERT INTO `destino` (`id_destino`, `nombre`, `ciudad`, `pais`, `descripcion`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `destino_has_paquete_turistico`
---
-
-CREATE TABLE `destino_has_paquete_turistico` (
-  `destino_id_destino` int(11) NOT NULL,
-  `paquete_turistico_id_paquete_turistico` int(11) NOT NULL,
-  `fecha_salida` date NOT NULL,
-  `fecha_llegada` date NOT NULL,
-  `orden_visita` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `destino_has_paquete_turistico`
---
-
-INSERT INTO `destino_has_paquete_turistico` (`destino_id_destino`, `paquete_turistico_id_paquete_turistico`, `fecha_salida`, `fecha_llegada`, `orden_visita`) VALUES
-(1, 1, '2025-12-25', '2026-01-01', 1),
-(1, 2, '2025-12-25', '2026-01-01', 1),
-(2, 1, '2026-01-01', '2026-01-08', 2),
-(2, 2, '2026-01-01', '2026-01-08', 2),
-(2, 3, '2026-01-01', '2026-01-08', 1),
-(2, 5, '2026-01-10', '2026-01-17', 1),
-(2, 7, '2026-01-29', '2026-02-05', 3),
-(3, 2, '2026-01-08', '2026-01-15', 3),
-(3, 7, '2026-01-22', '2026-01-29', 2),
-(3, 9, '2026-01-20', '2026-01-27', 1),
-(4, 4, '2026-01-07', '2026-01-14', 1),
-(4, 7, '2026-01-15', '2026-01-22', 1),
-(5, 5, '2026-01-17', '2026-01-24', 2),
-(5, 6, '2026-01-24', '2026-01-31', 3),
-(5, 10, '2026-01-25', '2026-02-01', 1),
-(6, 4, '2026-01-21', '2026-01-28', 3),
-(6, 6, '2026-01-17', '2026-01-24', 2),
-(6, 9, '2026-01-27', '2026-02-03', 2),
-(7, 3, '2026-01-08', '2026-01-15', 2),
-(7, 6, '2026-01-10', '2026-01-17', 1),
-(7, 10, '2026-02-01', '2026-02-08', 2),
-(8, 5, '2026-01-24', '2026-01-31', 3),
-(8, 8, '2026-02-03', '2026-02-10', 3),
-(9, 3, '2026-01-15', '2026-01-22', 3),
-(9, 8, '2026-01-27', '2026-02-03', 2),
-(9, 9, '2026-02-03', '2026-02-10', 3),
-(9, 10, '2026-02-08', '2026-02-15', 3),
-(10, 3, '2026-01-22', '2026-01-29', 4),
-(10, 4, '2026-01-14', '2026-01-21', 2),
-(10, 8, '2026-01-20', '2026-01-27', 1),
-(11, 11, '2026-01-10', '2026-01-17', 1),
-(11, 12, '2026-01-10', '2026-01-17', 1),
-(11, 15, '2026-02-01', '2026-02-08', 2),
-(11, 21, '2026-02-23', '2026-03-02', 4),
-(12, 12, '2026-01-17', '2026-01-24', 2),
-(13, 12, '2026-01-24', '2026-01-31', 3),
-(14, 13, '2026-01-15', '2026-01-22', 1),
-(15, 13, '2026-01-22', '2026-01-29', 2),
-(15, 15, '2026-02-08', '2026-02-15', 3),
-(15, 20, '2026-02-02', '2026-02-09', 1),
-(16, 13, '2026-01-29', '2026-02-05', 3),
-(17, 14, '2026-01-20', '2026-01-27', 1),
-(17, 21, '2026-02-16', '2026-02-23', 3),
-(18, 14, '2026-01-27', '2026-02-03', 2),
-(19, 14, '2026-02-03', '2026-02-10', 3),
-(20, 15, '2026-01-25', '2026-02-01', 1),
-(20, 20, '2026-02-09', '2026-02-16', 2),
-(21, 16, '2026-01-10', '2026-01-17', 1),
-(21, 21, '2026-02-09', '2026-02-16', 2),
-(22, 16, '2026-01-17', '2026-01-24', 2),
-(23, 16, '2026-01-24', '2026-01-31', 3),
-(23, 20, '2026-02-16', '2026-02-23', 3),
-(24, 17, '2026-01-15', '2026-01-22', 1),
-(24, 19, '2026-02-06', '2026-02-13', 2),
-(25, 17, '2026-01-22', '2026-01-29', 2),
-(26, 17, '2026-01-29', '2026-02-05', 3),
-(26, 21, '2026-02-02', '2026-02-09', 1),
-(27, 18, '2026-01-20', '2026-01-27', 1),
-(28, 18, '2026-01-27', '2026-02-03', 2),
-(28, 19, '2026-02-13', '2026-02-20', 3),
-(28, 20, '2026-02-23', '2026-03-02', 4),
-(29, 18, '2026-02-03', '2026-02-10', 3),
-(30, 19, '2026-01-30', '2026-02-06', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `paquete_turistico`
+-- Estructura de tabla para la tabla `paquete_turistico`
 --
 
 CREATE TABLE `paquete_turistico` (
@@ -174,7 +133,7 @@ CREATE TABLE `paquete_turistico` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `paquete_turistico`
+-- Volcado de datos para la tabla `paquete_turistico`
 --
 
 INSERT INTO `paquete_turistico` (`id_paquete_turistico`, `costo_paquete`, `fecha_inicio`, `fecha_final`, `modalidad`, `cupos`) VALUES
@@ -203,7 +162,7 @@ INSERT INTO `paquete_turistico` (`id_paquete_turistico`, `costo_paquete`, `fecha
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reserva`
+-- Estructura de tabla para la tabla `reserva`
 --
 
 CREATE TABLE `reserva` (
@@ -214,7 +173,7 @@ CREATE TABLE `reserva` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `reserva`
+-- Volcado de datos para la tabla `reserva`
 --
 
 INSERT INTO `reserva` (`id_reserva`, `estado`, `cupos`, `id_usuario`) VALUES
@@ -223,7 +182,21 @@ INSERT INTO `reserva` (`id_reserva`, `estado`, `cupos`, `id_usuario`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reserva_has_paquete_turistico`
+-- Estructura de tabla para la tabla `destino_has_paquete_turistico`
+--
+
+CREATE TABLE `destino_has_paquete_turistico` (
+  `destino_id_destino` int(11) NOT NULL,
+  `paquete_turistico_id_paquete_turistico` int(11) NOT NULL,
+  `fecha_salida` date NOT NULL,
+  `fecha_llegada` date NOT NULL,
+  `orden_visita` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `reserva_has_paquete_turistico`
 --
 
 CREATE TABLE `reserva_has_paquete_turistico` (
@@ -232,141 +205,125 @@ CREATE TABLE `reserva_has_paquete_turistico` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `reserva_has_paquete_turistico`
---
-
-INSERT INTO `reserva_has_paquete_turistico` (`reserva_id_reserva`, `paquete_turistico_id_paquete_turistico`) VALUES
-(1, 9);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `usuario`
---
-
-CREATE TABLE `usuario` (
-  `id_usuario` int(11) NOT NULL,
-  `rut` varchar(12) NOT NULL,
-  `nombres` varchar(80) NOT NULL,
-  `apellido_paterno` varchar(45) NOT NULL,
-  `apellido_materno` varchar(45) NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `contraseña` varchar(255) NOT NULL,
-  `rol` varchar(20) NOT NULL,
-  `telefono` varchar(15) NOT NULL,
-  `fecha_nacimiento` date NOT NULL,
-  `fecha_registro` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `usuario`
---
-
-INSERT INTO `usuario` (`id_usuario`, `rut`, `nombres`, `apellido_paterno`, `apellido_materno`, `email`, `contraseña`, `rol`, `telefono`, `fecha_nacimiento`, `fecha_registro`) VALUES
-(1, '12345678-9', 'Admin', 'Sistema', 'Principal', 'admin@admin.cl', '$2b$12$BpM6YxY9Mh6BaBllbSKO4OvH362uguAwyNqKrW3lvp9aeOHToPL4S', 'Administrador', '+56 9 1234 5678', '1990-01-01', '2025-11-29'),
-(2, '98765432-1', 'Cliente', 'Prueba', 'Test', 'cliente@cliente.cl', '$2b$12$cbxQoXJlzE9aFW9NRVHeMuljXIHv85rVxmSkc2afQEAgAyJloLyrC', 'Cliente', '+56 9 8765 4321', '1995-06-15', '2025-11-29'),
-(3, '20000000-5', 'Juanito', 'Navarrito', 'Carter', 'correo@correo.cl', '$2b$12$uJw6x0sA0xdRN3bWihkdV.aYEijnSnzqRAtOrrj.sFoMBXXFM0H.G', 'Cliente', '+56 9 3123 2323', '2000-09-23', '2025-12-01');
-
---
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `destino`
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id_usuario`),
+  ADD UNIQUE KEY `email_unique` (`email`),
+  ADD UNIQUE KEY `rut_unique` (`rut`);
+
+--
+-- Indices de la tabla `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD PRIMARY KEY (`id_reset`),
+  ADD KEY `fk_pr_usuario_rut` (`user_rut`);
+
+--
+-- Indices de la tabla `destino`
 --
 ALTER TABLE `destino`
   ADD PRIMARY KEY (`id_destino`),
-  ADD INDEX `idx_destino_pais` (`pais`),    -- NUEVO: Optimización de búsqueda
-  ADD INDEX `idx_destino_ciudad` (`ciudad`); -- NUEVO: Optimización de búsqueda
+  ADD INDEX `idx_destino_pais` (`pais`),
+  ADD INDEX `idx_destino_ciudad` (`ciudad`);
 
 --
--- Indexes for table `destino_has_paquete_turistico`
---
-ALTER TABLE `destino_has_paquete_turistico`
-  ADD PRIMARY KEY (`destino_id_destino`,`paquete_turistico_id_paquete_turistico`),
-  ADD KEY `fk_dhp_paquete` (`paquete_turistico_id_paquete_turistico`);
-
---
--- Indexes for table `paquete_turistico`
+-- Indices de la tabla `paquete_turistico`
 --
 ALTER TABLE `paquete_turistico`
   ADD PRIMARY KEY (`id_paquete_turistico`),
-  ADD INDEX `idx_paquete_modalidad` (`modalidad`), -- NUEVO: Filtro eficiente
-  ADD INDEX `idx_paquete_fecha` (`fecha_inicio`);   -- NUEVO: Orden cronológico rápido
+  ADD INDEX `idx_paquete_modalidad` (`modalidad`),
+  ADD INDEX `idx_paquete_fecha` (`fecha_inicio`);
 
 --
--- Indexes for table `reserva`
+-- Indices de la tabla `reserva`
 --
 ALTER TABLE `reserva`
   ADD PRIMARY KEY (`id_reserva`),
   ADD KEY `fk_reserva_usuario` (`id_usuario`);
 
 --
--- Indexes for table `reserva_has_paquete_turistico`
+-- Indices de la tabla `destino_has_paquete_turistico`
+--
+ALTER TABLE `destino_has_paquete_turistico`
+  ADD PRIMARY KEY (`destino_id_destino`,`paquete_turistico_id_paquete_turistico`),
+  ADD KEY `fk_dhp_paquete` (`paquete_turistico_id_paquete_turistico`);
+
+--
+-- Indices de la tabla `reserva_has_paquete_turistico`
 --
 ALTER TABLE `reserva_has_paquete_turistico`
   ADD PRIMARY KEY (`reserva_id_reserva`,`paquete_turistico_id_paquete_turistico`),
   ADD KEY `fk_rhp_paquete` (`paquete_turistico_id_paquete_turistico`);
 
 --
--- Indexes for table `usuario`
---
-ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`id_usuario`),
-  ADD UNIQUE KEY `email_unique` (`email`), -- NUEVO: Seguridad y Velocidad de Login
-  ADD UNIQUE KEY `rut_unique` (`rut`);      -- NUEVO: Integridad de identidad única
-
---
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `destino`
---
-ALTER TABLE `destino`
-  MODIFY `id_destino` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
-
---
--- AUTO_INCREMENT for table `paquete_turistico`
---
-ALTER TABLE `paquete_turistico`
-  MODIFY `id_paquete_turistico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
---
--- AUTO_INCREMENT for table `reserva`
---
-ALTER TABLE `reserva`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `usuario`
+-- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
   MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT de la tabla `password_resets`
+--
+ALTER TABLE `password_resets`
+  MODIFY `id_reset` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `destino`
+--
+ALTER TABLE `destino`
+  MODIFY `id_destino` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT de la tabla `paquete_turistico`
+--
+ALTER TABLE `paquete_turistico`
+  MODIFY `id_paquete_turistico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `reserva`
+--
+ALTER TABLE `reserva`
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Restricciones para tablas volcadas
 --
 
 --
--- Constraints for table `destino_has_paquete_turistico`
+-- Filtros para la tabla `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD CONSTRAINT `fk_pr_usuario_rut` FOREIGN KEY (`user_rut`) REFERENCES `usuario` (`rut`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `reserva`
+--
+ALTER TABLE `reserva`
+  ADD CONSTRAINT `fk_reserva_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `destino_has_paquete_turistico`
 --
 ALTER TABLE `destino_has_paquete_turistico`
   ADD CONSTRAINT `fk_dhp_destino` FOREIGN KEY (`destino_id_destino`) REFERENCES `destino` (`id_destino`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_dhp_paquete` FOREIGN KEY (`paquete_turistico_id_paquete_turistico`) REFERENCES `paquete_turistico` (`id_paquete_turistico`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `reserva`
---
-ALTER TABLE `reserva`
-  ADD CONSTRAINT `fk_reserva_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `reserva_has_paquete_turistico`
+-- Filtros para la tabla `reserva_has_paquete_turistico`
 --
 ALTER TABLE `reserva_has_paquete_turistico`
   ADD CONSTRAINT `fk_rhp_paquete` FOREIGN KEY (`paquete_turistico_id_paquete_turistico`) REFERENCES `paquete_turistico` (`id_paquete_turistico`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_rhp_reserva` FOREIGN KEY (`reserva_id_reserva`) REFERENCES `reserva` (`id_reserva`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

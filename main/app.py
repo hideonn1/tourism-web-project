@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, flash, redirect, url_for
 from config import conectar_db
 from src.Datos.usuario_repository import Usuario_Repository
 from src.Logica_de_Negocio.usuarios_service import Usuario_Service
@@ -10,6 +10,8 @@ from src.Datos.reserva_repository import Reservas_Repository
 from src.Logica_de_Negocio.reservas_service import Reservas_Service
 from mysql.connector import Error
 from src.Utils.img_conversor_tool import procesar_todas_las_imagenes
+from src.Utils.security import generar_token_recuperacion, verificar_token_recuperacion
+from src.Utils.mail_send import enviar_correo_recuperacion
 
 import os
 from dotenv import load_dotenv
@@ -17,7 +19,21 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+if os.environ.get('FLASK_ENV') == 'production':
+    app.config['SESSION_COOKIE_SECURE'] = True
+else:
+    app.config['SESSION_COOKIE_SECURE'] = False
+    print("\n")
+    print("Advertencia: SESSION_COOKIE_SECURE está deshabilitado. No uses esta aplicación en producción.")
+    print("\n")
+
+from datetime import timedelta
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
 
 # Configurar Session Interface Encriptada (AES-GCM)
 from src.Utils.encrypted_session import EncryptedCookieSessionInterface
@@ -330,7 +346,102 @@ def convertir_imagenes():
         return jsonify({'success': True, 'message': 'Imagenes convertidas exitosamente'})
     except Exception as e:
         print(e)
-        return jsonify({'success': False, 'message': str(e)}), 500 
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        
+        db = conectar_db()
+        cursor = db.cursor(dictionary=True)
+
+        try:
+            # 1. Buscamos al usuario por email para obtener su RUT
+            cursor.execute("SELECT rut FROM usuario WHERE email = %s", (email,))
+            usuario = cursor.fetchone()
+
+            # TIP de Seguridad: Siempre mostrar el mismo mensaje
+            mensaje_estandar = "Si el correo está registrado, recibirás un enlace pronto."
+
+            if usuario:
+                rut_usuario = usuario['rut']
+                
+                # 2. Generamos el token usando security.py
+                token_plano, t_hash, expiracion = generar_token_recuperacion()
+
+                # 3. Guardamos en la tabla password_resets
+                sql = """INSERT INTO password_resets (user_rut, token_hash, expires_at) 
+                         VALUES (%s, %s, %s)"""
+                cursor.execute(sql, (rut_usuario, t_hash, expiracion))
+                db.commit()
+
+                # 4. Enviamos el correo
+                enviar_correo_recuperacion(email, token_plano)
+            
+            flash(mensaje_estandar, "info")
+            
+        except Exception as e:
+            print(f"Error en forgot_password: {e}")
+            flash("Ocurrió un error al procesar la solicitud.", "danger")
+        finally:
+            cursor.close()
+            db.close()
+            
+        return redirect(url_for('index')) # Redirect to index (login modal)
+
+    return render_template('forgot_password.html')
+
+
+
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    import hashlib
+    token_hash_busqueda = hashlib.sha256(token.encode()).hexdigest()
+
+    db = conectar_db()
+    cursor = db.cursor(dictionary=True)
+    
+    try:
+        # Buscamos el registro y verificamos que no haya expirado
+        sql = "SELECT * FROM password_resets WHERE token_hash = %s AND expires_at > NOW()"
+        cursor.execute(sql, (token_hash_busqueda,))
+        reseteo = cursor.fetchone()
+
+        if not reseteo:
+            flash("El enlace es inválido o ha expirado.", "danger")
+            return redirect(url_for('forgot_password'))
+
+        if request.method == 'POST':
+            nueva_clave = request.form.get('password')
+            confirm_clave = request.form.get('confirm_password')
+
+            if nueva_clave != confirm_clave:
+                flash("Las contraseñas no coinciden.", "danger")
+                return render_template('reset_password.html', token=token)
+
+            # Usar servicio para actualizar contraseña de forma segura (hasheada)
+            usuario_serv.restablecer_contrasena(reseteo['user_rut'], nueva_clave)
+            
+            # Borrar el token usado
+            cursor.execute("DELETE FROM password_resets WHERE user_rut = %s", 
+                           (reseteo['user_rut'],))
+            db.commit()
+            
+            flash("Contraseña actualizada con éxito. Inicia sesión.", "success")
+            return redirect(url_for('index')) # Back to home/login
+            
+    except Exception as e:
+        print(f"Error en reset_password: {e}")
+        flash("Ocurrió un error al restablecer la contraseña.", "danger")
+        return redirect(url_for('forgot_password'))
+    finally:
+        cursor.close()
+        db.close()
+
+    return render_template('reset_password.html', token=token)
+
+
 
 
 if __name__ == '__main__':

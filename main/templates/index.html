@@ -146,6 +146,10 @@
                     <button type="submit" class="btn-primary">Ingresar</button>
                 </form>
                 <p id="login-error" class="error-msg"></p>
+                <div style="margin-top: 1rem; text-align: center;">
+                    <a href="{{ url_for('forgot_password') }}" class="btn-text"
+                        style="font-size: 0.9rem; color: var(--secondary-text);">¿Olvidaste tu contraseña?</a>
+                </div>
                 <div style="margin-top: 1.5rem; text-align: center;">
                     <button class="btn-text" onclick="showSection('register')">Si no tienes una cuenta, regístrate
                         aquí</button>

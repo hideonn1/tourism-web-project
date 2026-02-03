@@ -29,6 +29,8 @@ services:
       - DB_NAME=${DB_NAME}
       - FLASK_ENV=development
       - SECRET_KEY=${SECRET_KEY}
+      - BASE_URL=http://localhost:5000
+      - RESEND_API_KEY=${RESEND_API_KEY}
     volumes:
       - .:/app
       - ./static/img:/app/static/img

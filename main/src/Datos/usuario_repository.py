@@ -225,4 +225,20 @@ class Usuario_Repository:
                 return False 
 
         finally:
-            pass 
+            cursor.close()
+            conexion.close() 
+
+    def actualizar_contrasena(self, rut, nueva_contrasena):
+        conexion = self._conectar_db()
+        cursor = conexion.cursor()
+        try:
+            query = "UPDATE usuario SET contraseña = %s WHERE rut = %s"
+            cursor.execute(query, (nueva_contrasena, rut))
+            conexion.commit()
+            return True
+        except Exception as e:
+            conexion.rollback()
+            raise e
+        finally:
+            cursor.close()
+            conexion.close() 

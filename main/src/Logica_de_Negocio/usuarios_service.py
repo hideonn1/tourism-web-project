@@ -152,3 +152,11 @@ class Usuario_Service:
         # Persist changes
         self._repo.update(usuario)
         return True
+
+    def restablecer_contrasena(self, rut, nueva_contrasena):
+        # Hash de la nueva contraseña
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(nueva_contrasena.encode('utf-8'), salt).decode('utf-8')
+        
+        # Llamar al repositorio para actualizar
+        return self._repo.actualizar_contrasena(rut, hashed)
