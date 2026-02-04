@@ -24,7 +24,9 @@ body.light-mode {
 #home,
 #login,
 #register,
-#profile-section {
+#profile-section,
+#forgot-password,
+#reset-password {
     box-sizing: border-box;
 }
 
@@ -219,12 +221,14 @@ body {
     color: var(--accent);
     cursor: pointer;
     font-size: 0.9rem;
-    text-decoration: underline;
+    text-decoration: none;
     padding: 0;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .btn-text:hover {
     color: var(--text);
+    transform: translateY(-1px);
 }
 
 .btn-secondary:hover {
@@ -288,7 +292,9 @@ input:focus {
 }
 
 #login,
-#profile-section {
+#profile-section,
+#forgot-password,
+#reset-password {
     position: relative;
     overflow: hidden;
 }

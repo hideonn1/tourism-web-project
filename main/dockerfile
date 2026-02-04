@@ -1,6 +1,8 @@
 # 1. Imagen base oficial de Python (liviana)
 FROM python:3.11-slim
 
+ENV PYTHONUNBUFFERED=1
+
 # 2. Instalar dependencias del sistema necesarias para MySQL
 RUN apt-get update && apt-get install -y \
     gcc \

@@ -194,7 +194,7 @@ class Usuario_Repository:
         cursor = conexion.cursor(dictionary=True)
 
         try:
-            query = "SELECT * FROM Usuario WHERE contraseña = %s"
+            query = "SELECT * FROM usuario WHERE contraseña = %s"
             datos = (contraseña_actual,)
 
             cursor.execute(query,datos)
@@ -213,7 +213,7 @@ class Usuario_Repository:
         cursor = conexion.cursor(dictionary=True)
 
         try:
-            query = "SELECT * FROM Usuario WHERE telefono = %s"
+            query = "SELECT * FROM usuario WHERE telefono = %s"
             datos = (telefono,)
 
             cursor.execute(query,datos)

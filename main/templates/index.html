@@ -147,8 +147,8 @@
                 </form>
                 <p id="login-error" class="error-msg"></p>
                 <div style="margin-top: 1rem; text-align: center;">
-                    <a href="{{ url_for('forgot_password') }}" class="btn-text"
-                        style="font-size: 0.9rem; color: var(--secondary-text);">¿Olvidaste tu contraseña?</a>
+                    <a href="{{ url_for('forgot_password') }}" class="btn-text" style="font-size: 0.9rem;">¿Olvidaste tu
+                        contraseña?</a>
                 </div>
                 <div style="margin-top: 1.5rem; text-align: center;">
                     <button class="btn-text" onclick="showSection('register')">Si no tienes una cuenta, regístrate
@@ -309,6 +309,35 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <!-- Consume Flask Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="flash-messages" data-messages='{{ messages | tojson | safe }}' style="display: none;"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const flashElement = document.getElementById('flash-messages');
+                if (flashElement) {
+                    const messages = JSON.parse(flashElement.dataset.messages);
+
+                    messages.forEach((item, index) => {
+                        const message = item[1]; // item is [category, message]
+                        setTimeout(() => {
+                            if (typeof showNotification === 'function') {
+                                showNotification(message);
+                            } else {
+                                console.log("Notification:", message);
+                            }
+                        }, 500 * (index + 1));
+                    });
+                }
+            } catch (e) {
+                console.error("Error parsing flash messages:", e);
+            }
+        });
+    </script>
+    {% endif %}
+    {% endwith %}
 </body>
 
 </html>

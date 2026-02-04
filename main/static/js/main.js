@@ -400,6 +400,7 @@ async function loadPaquetes() {
                         .replace(/[^\w-]+/g, '')
                         .replace(/-+/g, '-');
                     collageHtml += `<img src="/static/img/${slug}.webp" alt="${d.nombre}" loading="lazy" 
+                        onerror="this.src='/static/img/default.webp'"
                         onclick="openPackageGallery(${p.id_paquete}, ${index})" style="cursor: pointer;">`;
                 });
                 collageHtml += `</div>`;
@@ -488,6 +489,7 @@ async function loadAvailablePackages() {
                         .replace(/[^\w-]+/g, '')
                         .replace(/-+/g, '-');
                     collageHtml += `<img src="/static/img/${slug}.webp" alt="${d.nombre}" loading="lazy" 
+                        onerror="this.src='/static/img/default.webp'"
                         onclick="openPackageGallery(${p.id_paquete}, ${index})" style="cursor: pointer;">`;
                 });
                 collageHtml += `</div>`;

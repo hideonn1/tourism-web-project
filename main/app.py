@@ -377,7 +377,11 @@ def forgot_password():
                 db.commit()
 
                 # 4. Enviamos el correo
-                enviar_correo_recuperacion(email, token_plano)
+                print(f"DEBUG: Enviando correo a {email}...")
+                exito = enviar_correo_recuperacion(email, token_plano)
+                print(f"DEBUG: Resultado envio correo: {exito}")
+            else:
+                print(f"DEBUG: Usuario con email {email} NO encontrado en la BD.")
             
             flash(mensaje_estandar, "info")
             
@@ -440,6 +444,8 @@ def reset_password(token):
         db.close()
 
     return render_template('reset_password.html', token=token)
+
+
 
 
 
