@@ -12,6 +12,9 @@ from mysql.connector import Error
 from src.Utils.img_conversor_tool import procesar_todas_las_imagenes
 from src.Utils.security import generar_token_recuperacion, verificar_token_recuperacion
 from src.Utils.mail_send import enviar_correo_recuperacion
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 import os
 from dotenv import load_dotenv
@@ -19,6 +22,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+# Fix para obtener la IP real detrás de Docker/Proxy (Importante para producción)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SESSION_COOKIE_HTTPONLY'] = True
@@ -38,6 +43,14 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
 # Configurar Session Interface Encriptada (AES-GCM)
 from src.Utils.encrypted_session import EncryptedCookieSessionInterface
 app.session_interface = EncryptedCookieSessionInterface()
+
+# Configurar Rate Limiter
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
 
 # Repositorios y Servicios
 usuario_repo = Usuario_Repository(conectar_db)
@@ -96,8 +109,7 @@ def login():
              return jsonify({'success': False, 'message': 'Contraseña incorrecta'}), 401
     except ValueError as e:
         return jsonify({'success': False, 'message': str(e)}), 404
-    except ValueError as e:
-        return jsonify({'success': False, 'message': str(e)}), 404
+
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -349,6 +361,8 @@ def convertir_imagenes():
         return jsonify({'success': False, 'message': str(e)}), 500
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
+@limiter.limit("3 per hour")  # Límite general
+@limiter.limit("5 per minute") # Prevenir spam rápido (ajustado para ser menos agresivo)
 def forgot_password():
     if request.method == 'POST':
         email = request.form.get('email')
