@@ -12,4 +12,4 @@ def verificar_token_recuperacion(token_plano_usuario, hash_db, expiracion_db):
     if datetime.now() > expiracion_db:
         return False
     hash_intento = hashlib.sha256(token_plano_usuario.encode()).hexdigest()
-    return hash_intento == hash_db
+    return secrets.compare_digest(hash_intento, hash_db)
