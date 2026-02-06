@@ -85,7 +85,7 @@ def privacy():
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    data = request.json
+    data = request.get_json(silent=True) or request.form
     email = data.get('email')
     password = data.get('password')
     
@@ -113,7 +113,7 @@ def login():
 
 @app.route('/api/register', methods=['POST'])
 def register():
-    data = request.json
+    data = request.get_json(silent=True) or request.form
     try:
         import re
         # Validaciones explicitas
