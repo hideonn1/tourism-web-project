@@ -26,7 +26,7 @@ Se intentó realizar un bypass de las validaciones del frontend (HTML5) enviando
 
 **Payload:** `<script>alert("XSS_EXITOSO")</script>`
 
-**Resultado:** Rechazo íntegro. El backend respondió con un 400 Bad Request, validando que los datos persistidos en la base de datos MySQL son seguros y libres de scripts.
+**Resultado:** Rechazo íntegro. Los filtros del frontend (HTML5) y backend (Regex) bloquearon el payload.
 
 ![Validación de Backend](main/docs/assets/register_screenshot.png)
 
@@ -38,8 +38,6 @@ Se auditó la arquitectura de acceso a datos personales para prevenir referencia
 
 **Prueba:** Uso del endpoint `/api/me` para obtener datos basados estrictamente en el contenido de la cookie cifrada.
 
-**Resultado:** El sistema extrae la identidad del usuario directamente de la sesión, haciendo imposible que un usuario consulte datos ajenos manipulando parámetros en la URL.
+**Resultado:** Rechazo íntegro. El backend respondió con un 400 Bad Request, validando que los datos persistidos en la base de datos MySQL son seguros y libres de scripts.
 
 ![Integridad de Sesión](main/docs/assets/session-integrity.png)
-
-*Figura 3: Respuesta exitosa (200 OK) al consultar el propio perfil a través de la sesión cifrada.*
