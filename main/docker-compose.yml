@@ -17,6 +17,7 @@ services:
 
   web:
     build: .
+    image: pjd_flask
     container_name: pjd_flask
     ports:
       - "5000:5000"
@@ -35,5 +36,16 @@ services:
       - .:/app
       - ./static/img:/app/static/img
       - /app/venv
+  
+  # Escaneo de vulnerabilidades con Trivy para la imagen pjd_flask
+  trivy:
+    image: aquasec/trivy:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./.trivy-cache:/root/.cache
+    command: image --severity HIGH,CRITICAL --exit-code 0 pjd_flask
+    depends_on:
+      - web
+
 volumes:
   db_data:
