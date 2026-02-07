@@ -96,14 +96,7 @@ def login():
             session['rol'] = usuario.rol
             return jsonify({
                 'success': True, 
-                'usuario': {
-                    'id': usuario.id_usuario,
-                    'nombre': usuario.nombres,
-                    'apellido_paterno': usuario.apellido_paterno,
-                    'email': usuario.email,
-                    'telefono': usuario.telefono,
-                    'rol': usuario.rol
-                }
+                'usuario': usuario.to_dict()
             })
         else:
              return jsonify({'success': False, 'message': 'Contraseña incorrecta'}), 401

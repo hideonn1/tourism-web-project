@@ -78,7 +78,8 @@
 }
 
 .content-area {
-    margin-top: 2rem;
+    margin-top: 0;
+    /* Spacing handled by title */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
@@ -86,6 +87,14 @@
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.client-section-title {
+    max-width: 1200px;
+    margin: 0 auto 1.5rem auto;
+    text-align: left;
+    padding-left: 0;
+    color: var(--text);
 }
 
 /* Admin Layout */

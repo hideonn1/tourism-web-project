@@ -307,7 +307,15 @@
         </footer>
     </div>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <!-- Gallery Modal -->
+    <div id="gallery-modal" class="gallery-overlay">
+        <span class="close" onclick="closeGallery()">&times;</span>
+        <img class="gallery-content" id="gallery-img">
+        <a class="prev" onclick="prevImage()">&#10094;</a>
+        <a class="next" onclick="nextImage()">&#10095;</a>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
     <!-- Consume Flask Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
