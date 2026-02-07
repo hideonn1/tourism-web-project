@@ -736,10 +736,12 @@ async function loadMyReservations() {
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
-                <h4>Reserva #${r.id_reserva}</h4>
-                <p><strong>Paquete ID:</strong> ${r.id_paquete_turistico}</p>
-                <p><strong>Cupos:</strong> ${r.cupos}</p>
-                <p><strong>Estado:</strong> ${r.estado}</p>
+                <div class="card-content">
+                    <h4>Reserva #${r.id_reserva}</h4>
+                    <p><strong>Paquete ID:</strong> ${r.id_paquete_turistico}</p>
+                    <p><strong>Cupos:</strong> ${r.cupos}</p>
+                    <p><strong>Estado:</strong> ${r.estado}</p>
+                </div>
             `;
             content.appendChild(card);
         });

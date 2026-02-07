@@ -1,0 +1,40 @@
+:root {
+    --primary: #0f172a;
+    --secondary: #334155;
+    --accent: #3b82f6;
+    --text: #f8fafc;
+    --background: #020617;
+    --card-bg: #1e293b;
+    --error: #ef4444;
+    --navbar-bg: rgba(15, 23, 42, 0.8);
+}
+
+body.light-mode {
+    --primary: #e2e8f0;
+    --secondary: #cbd5e1;
+    --accent: #3b82f6;
+    /* Keep accent blue */
+    --text: #0f172a;
+    --background: #f8fafc;
+    --card-bg: #ffffff;
+    --navbar-bg: rgba(255, 255, 255, 0.9);
+    --secondary-text: #64748b;
+}
+
+#home,
+#login,
+#register,
+#profile-section,
+#forgot-password,
+#reset-password {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background);
+    color: var(--text);
+    transition: background-color 0.3s, color 0.3s;
+}

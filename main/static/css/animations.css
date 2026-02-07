@@ -1,0 +1,129 @@
+/* Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatBubble {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(20px, -20px);
+    }
+}
+
+@keyframes smoothFade {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes revealLeftRight {
+    0% {
+        clip-path: inset(0 100% 0 0);
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    10% {
+        opacity: 1;
+        /* Make visible quickly so clip-path does the work */
+    }
+
+    100% {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animation Classes */
+.bubble {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.1;
+    z-index: 0;
+    animation: floatBubble 10s infinite ease-in-out;
+}
+
+.bubble-1 {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, #8b5cf6, #c026d3);
+    top: -50px;
+    left: -50px;
+    animation-delay: 0s;
+}
+
+.bubble-2 {
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    bottom: 10%;
+    right: -50px;
+    animation-delay: -2s;
+}
+
+.bubble-3 {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, #ec4899, #f43f5e);
+    top: 40%;
+    left: 20%;
+    opacity: 0.4;
+    animation-delay: -5s;
+}
+
+.admin-transition {
+    animation: smoothFade 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.hero-subtitle {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 3rem auto;
+    /* Center and keep bottom margin */
+    position: relative;
+    clip-path: inset(0 100% 0 0);
+    /* Start fully hidden from right */
+    animation: revealLeftRight 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    animation-delay: 0.2s;
+    /* Brief pause before starting */
+    opacity: 0;
+    /* Start hidden */
+}
