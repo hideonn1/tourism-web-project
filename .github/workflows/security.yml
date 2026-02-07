@@ -17,7 +17,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t pjd_flask:${{ github.sha }} .
+          docker build -t pjd_flask:${{ github.sha }} ./main
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
