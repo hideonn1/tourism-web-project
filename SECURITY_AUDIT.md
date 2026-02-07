@@ -41,3 +41,47 @@ Se auditó la arquitectura de acceso a datos personales para prevenir referencia
 **Resultado:** Rechazo íntegro. El backend respondió con un 400 Bad Request, validando que los datos persistidos en la base de datos MySQL son seguros y libres de scripts.
 
 ![Integridad de Sesión](main/docs/assets/session-integrity.png)
+
+*Figura 3: Respuesta del servidor validando que los datos persistidos en la base de datos MySQL son seguros y libres de scripts.*
+
+## Reporte auditoría de seguridad 07/02/2026
+
+### 1. Herramientas de auditoría
+Se ha integrado la herramienta Trivy para auditar la imagen Docker y detectar vulnerabilidades.
+
+Análisis del Sistema Operativo (OS Scanning): Detección de CVEs en la imagen base de Debian.
+
+Análisis de Composición de Software (SCA): Identificación de librerías de Python vulnerables en requirements.txt.¨
+
+### 2. Mitigaciones implementadas
+
+**A. Hardening de Imagen Docker (Multi-stage Build)**
+Se realizó una refactorización completa del Dockerfile migrando de una construcción monolítica a una de múltiples etapas (Multi-stage).
+
+Resultado: Reducción de la superficie de ataque al eliminar herramientas de compilación (gcc, pkg-config, binutils) en la imagen final de producción.
+
+Impacto: El inventario de paquetes instalados se redujo de 140 a 103, eliminando vectores de ataque potenciales.
+
+**B. Gestión de Dependencias y Parches (SCA)**
+Se detectaron y mitigaron vulnerabilidades críticas de Path Traversal y Escalada de Privilegios mediante el anclaje de versiones seguras en las dependencias transitivas:
+
+jaraco.context: Actualizado de v5.3.0 a v6.1.0 (CVE-2026-23949 mitigado).
+
+wheel: Actualizado de v0.45.1 a v0.46.3 (CVE-2026-24049 mitigado).
+
+setuptools: Forzado a v81.0.0 para resolver vulnerabilidades de "vendoring" interno.
+
+Estado Actual: La capa de librerías de Python reporta 0 vulnerabilidades críticas/altas.
+
+### 3. Análisis de riesgo residual
+
+A fecha de esta auditoría, el reporte muestra 65 alertas en la capa del sistema operativo (Debian 13.3 Trixie).
+
+![Extracto del reporte de vulnerabilidades al finalizar auditoría](main/docs/assets/trivy-report.png)
+
+*Figura 4: Extracto del reporte de vulnerabilidades al finalizar auditoría.*
+
+Evaluación: Estas vulnerabilidades pertenecen al kernel de Linux y librerías del sistema (libc6) que actualmente no cuentan con un parche oficial (Fixed Version) por parte de los mantenedores de Debian.
+
+Estrategia: Se acepta el riesgo de forma temporal. Se ha programado un escaneo semanal automatizado para aplicar los parches en cuanto Debian libere las actualizaciones correspondientes.
+
