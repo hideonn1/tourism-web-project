@@ -1,5 +1,6 @@
 # Turismo Web App
 
+![Security Audit](https://github.com/hideonn1/tourism-web-project/actions/workflows/security.yml/badge.svg)
 ![HTML5](https://img.shields.io/badge/HTML5-Frontend-orange)
 ![CSS3](https://img.shields.io/badge/CSS3-Style-blue)
 ![JavaScript](https://img.shields.io/badge/JavaScript-Frontend-yellow)
