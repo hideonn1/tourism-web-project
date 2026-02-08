@@ -47,6 +47,12 @@ export function showSection(sectionId, state) {
         if (navDestinos) navDestinos.style.display = 'none';
     }
 
+    // Toggle Footer
+    const footer = document.querySelector('.footer-container');
+    if (footer) {
+        footer.style.display = sectionId === 'public-destinos' ? 'none' : 'block';
+    }
+
     updateTitle(sectionId);
 }
 

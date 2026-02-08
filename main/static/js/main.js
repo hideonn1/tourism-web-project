@@ -119,35 +119,78 @@ function showDashboard() {
     }
 }
 
+// Replaced by new full-screen implementation
 async function loadPublicDestinos() {
     showSection('public-destinos', state);
-    const content = document.getElementById('public-destinos-content');
-    content.innerHTML = '<p style="text-align:center;">Cargando...</p>';
+    const section = document.getElementById('public-destinos');
+
+    // Override section padding for full screen effect
+    section.style.padding = '0';
+    section.style.height = '100vh'; // Ensure full height
+    section.style.overflow = 'hidden';
+
+    // Show loading state
+    section.innerHTML = `
+        <div style="height: 100vh; display: flex; align-items: center; justify-content: center;">
+            <p style="font-size: 1.5rem; color: var(--text);">Cargando destinos...</p>
+        </div>
+    `;
 
     try {
         const res = await fetch('/api/destinos');
         const destinos = await res.json();
 
-        content.innerHTML = '';
+        // Clear loading
+        section.innerHTML = '';
+
+        // Create scroll container
+        const container = document.createElement('div');
+        container.className = 'destinations-scroll-container';
+        section.appendChild(container);
+
+        if (destinos.length === 0) {
+            container.innerHTML = `
+                <div class="destination-full-screen" style="align-items: center; justify-content: center;">
+                    <p>No hay destinos disponibles.</p>
+                </div>
+            `;
+            return;
+        }
+
         destinos.forEach(d => {
-            const card = document.createElement('div');
-            card.className = 'card';
+            const destSection = document.createElement('div');
+            destSection.className = 'destination-full-screen';
 
             const slug = createSlug(d.nombre);
             const imgUrl = `/static/img/${slug}.webp`;
+            // Pricing placeholder (not in API response usually, defaulting if missing)
+            const precio = d.precio ? formatCurrencyCLP(d.precio) : 'Consultar Precio';
 
-            card.innerHTML = `
-                <img src="${imgUrl}" alt="${d.nombre}" loading="lazy" onerror="this.src='/static/img/default.webp'">
-                <div class="card-content">
-                    <h4>${d.nombre}</h4>
-                    <p><strong>Ubicación:</strong> ${d.ciudad}, ${d.pais}</p>
-                    <p class="card-desc">${d.descripcion}</p>
+            destSection.innerHTML = `
+                <div class="destination-image-side">
+                    <img src="${imgUrl}" alt="${d.nombre}" loading="lazy" onerror="this.src='/static/img/default.webp'">
                 </div>
+                <div class="destination-info-side">
+                    <h2 class="dest-fs-title">${d.nombre}</h2>
+                    <div class="dest-fs-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        ${d.ciudad}, ${d.pais}
+                    </div>
+                    <p class="dest-fs-desc">${d.descripcion || 'Descubre las maravillas de este destino único, diseñado para ofrecerte experiencias inolvidables y momentos de relajación absoluta.'}</p>
+                </div>
+
             `;
-            content.appendChild(card);
+            container.appendChild(destSection);
         });
+
     } catch (e) {
-        content.innerHTML = '<p class="error-msg">Error cargando destinos.</p>';
+        console.error("Error loading destinations:", e);
+        section.innerHTML = `
+            <div style="height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                <p class="error-msg">Error cargando destinos.</p>
+                <button class="btn-primary" onclick="loadPublicDestinos()">Reintentar</button>
+            </div>
+        `;
     }
 }
 

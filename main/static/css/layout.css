@@ -239,6 +239,95 @@ body.light-mode .footer-container {
     overflow: hidden;
 }
 
+/* Full Screen Destination Layout */
+.destinations-scroll-container {
+    height: 100vh;
+    width: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    /* Hide scrollbar for cleaner look */
+    scrollbar-width: none;
+}
+
+.destinations-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.destination-full-screen {
+    height: 100vh;
+    width: 100vw;
+    scroll-snap-align: start;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--background);
+}
+
+.destination-image-side {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 65%;
+    /* Covers slightly more than half */
+    height: 100%;
+    z-index: 1;
+}
+
+.destination-image-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Mask to create blur effect towards the right */
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
+    -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
+}
+
+.destination-info-side {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    /* Overlap slightly with the faded image */
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+    box-sizing: border-box;
+    /* Optional: subtle gradient background behind text if needed for readability */
+    /* background: linear-gradient(to right, transparent, var(--background) 20%); */
+}
+
+/* Response Layout for Mobile */
+@media (max-width: 768px) {
+    .destination-full-screen {
+        flex-direction: column;
+    }
+
+    .destination-image-side {
+        width: 100%;
+        height: 50%;
+        position: relative;
+    }
+
+    .destination-image-side img {
+        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+        -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    .destination-info-side {
+        width: 100%;
+        height: 50%;
+        position: relative;
+        padding: 2rem;
+        background: var(--background);
+        /* Ensure solid background on mobile */
+    }
+}
+
+
+
 /* Responsive Layout */
 @media (max-width: 768px) {
     .navbar {

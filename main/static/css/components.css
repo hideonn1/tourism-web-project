@@ -783,3 +783,58 @@ input:focus {
     color: var(--accent);
     margin-bottom: 1rem;
 }
+
+/* Destination Full Screen Content */
+.dest-fs-title {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.dest-fs-location {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 300;
+}
+
+.dest-fs-desc {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--text);
+    opacity: 0.9;
+    max-width: 600px;
+}
+
+.dest-fs-price {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2rem;
+}
+
+.dest-fs-price span {
+    font-size: 1rem;
+    color: var(--secondary-text);
+    font-weight: 400;
+}
+
+@media (max-width: 768px) {
+    .dest-fs-title {
+        font-size: 2.5rem;
+    }
+
+    .dest-fs-location {
+        font-size: 1.2rem;
+    }
+}
